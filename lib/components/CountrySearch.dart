@@ -6,6 +6,7 @@ import 'package:cvkavach/services/api_service.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class CountrySearchProvider extends StatelessWidget {
   @override
@@ -18,23 +19,25 @@ class CountrySearchProvider extends StatelessWidget {
     );
   }
 }
-
 class CountrySearch extends StatefulWidget {
   CountrySearch({Key key}) : super(key: key);
   @override
   _CountrySearchWidget createState() => _CountrySearchWidget();
 }
-
 class Merged{
   final String foo;
   final String bar;
   Merged({this.foo, this.bar});
 }
-
+/// Sample linear data type.
+class LinearSales {
+  final int year;
+  final int sales;
+  LinearSales(this.year, this.sales);
+}
 class _CountrySearchWidget extends State<CountrySearch> {
   void initState() {
     super.initState();
-    //fetchCountryData('IND');
   }
 
   HashMap<String, String> countriesList = new HashMap<String, String>();
@@ -42,6 +45,7 @@ class _CountrySearchWidget extends State<CountrySearch> {
   Map<String, double> dataMap = new Map<String, double>();
   Map<String, String> finalResponseMap = new Map<String, String>();
   HashMap<String, String> responseMap = new HashMap<String, String>();
+  List<List<HistoryStruct>> historyMapList = new List<List<HistoryStruct>>();
   String dropdownValue = 'IND';
 
   Future<String> _fetchCountries() async {
@@ -56,7 +60,6 @@ class _CountrySearchWidget extends State<CountrySearch> {
     final dataRepository = Provider.of<DataRepository>(context, listen: false);
     responseMap = await dataRepository.getCountryInfo(input);
     print('country info CountryData.dart' + responseMap.toString());
-    //final countriesList = await dataRepository.getCountries();
     dataMap["active"]=double.parse(responseMap['Active']);
     dataMap["dead"]=double.parse(responseMap['Deaths']);
     dataMap["ok"]=double.parse(responseMap['Recovered']);
@@ -67,11 +70,24 @@ class _CountrySearchWidget extends State<CountrySearch> {
     finalResponseMap["LastUpdate"]=responseMap['LastUpdate'];
     return Future.value('OK');
   }
+  
+  List<HistoryStruct> c1 = new List<HistoryStruct>();
+  List<HistoryStruct> d1 = new List<HistoryStruct>();
+  List<HistoryStruct> r1 = new List<HistoryStruct>();
+
+  Future<String> fetchHistoricalData(String input) async {
+    final dataRepository = Provider.of<DataRepository>(context, listen: false);
+    historyMapList = await dataRepository.getHistoricData(input);
+    c1 = historyMapList[0];
+    d1 = historyMapList[1];
+    r1 = historyMapList[2];
+    return Future.value('OK');
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<String>>(
-      future: Future.wait([_fetchCountries(), fetchCountryData(dropdownValue)]), // function where you call your api
+      future: Future.wait([_fetchCountries(), fetchCountryData(dropdownValue), fetchHistoricalData(dropdownValue)]), // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {  // AsyncSnapshot<Your object type>
         if( snapshot.connectionState == ConnectionState.waiting){
             return  _buildLoading();
@@ -108,9 +124,13 @@ class _CountrySearchWidget extends State<CountrySearch> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          _buildDropdown(),
-          _CustomGraph(dataMap, "Cases"),
-          Column(
+          Flexible(
+            flex: 2,
+            child: _buildDropdown() ),
+          //_CustomGraph(dataMap, "Cases"),
+          Flexible(
+            flex: 2,
+            child: Column(
             children: <Widget>[
               _StatTile(Color(0xffffffff), 'Total Cases', int.parse(finalResponseMap['Confirmed'])),
               _StatTile(Color(0xfff5c76a), 'Active', int.parse(finalResponseMap['Active'])),
@@ -132,7 +152,14 @@ class _CountrySearchWidget extends State<CountrySearch> {
                 ],
               ),
             ],
-          ),
+          ) ),
+          Flexible(
+            flex: 2,
+            child: StackedAreaLineChart(
+            _createSampleData(c1, d1, r1),
+            // Disable animations for image tests.
+            animate: true,
+          ) )
         ],
       ),
     );
@@ -206,6 +233,51 @@ class _CountrySearchWidget extends State<CountrySearch> {
     );
   }
 
+  /// Create one series with sample hard coded data.
+  static List<charts.Series<HistoryStruct, DateTime>> _createSampleData(c1, d1, r1) {
+    return [
+      new charts.Series<HistoryStruct, DateTime>(
+        id: 'Cases',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (HistoryStruct sales, _) => sales.date,
+        measureFn: (HistoryStruct sales, _) => sales.count,
+        data: c1,
+      ),
+      new charts.Series<HistoryStruct, DateTime>(
+        id: 'Deaths',
+        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
+        domainFn: (HistoryStruct sales, _) => sales.date,
+        measureFn: (HistoryStruct sales, _) => sales.count,
+        data: d1,
+      ),
+      new charts.Series<HistoryStruct, DateTime>(
+        id: 'Recovered',
+        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
+        domainFn: (HistoryStruct sales, _) => sales.date,
+        measureFn: (HistoryStruct sales, _) => sales.count,
+        data: r1,
+      ),
+    ];
+  }
+}
+
+class StackedAreaLineChart extends StatelessWidget {
+  final List<charts.Series> seriesList;
+  final bool animate;
+
+  StackedAreaLineChart(this.seriesList, {this.animate});
+
+  @override
+  Widget build(BuildContext context) {
+    return new charts.TimeSeriesChart(
+      seriesList,
+      animate: animate,
+      // Optionally pass in a [DateTimeFactory] used by the chart. The factory
+      // should create the same type of [DateTime] as the data provided. If none
+      // specified, the default creates local date time.
+      dateTimeFactory: const charts.LocalDateTimeFactory(),
+    );
+  }
 }
 
 class _CustomGraph extends StatelessWidget {
@@ -216,19 +288,20 @@ class _CustomGraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("aspect ratio" + MediaQuery.of(context).size.aspectRatio.toString());
     double chartRadiusFactor =
-        MediaQuery.of(context).size.aspectRatio > 0.6 ? 0.5 : 0.625;
-    double fontSize = MediaQuery.of(context).size.aspectRatio > 0.6 ? 10 : 12;
+        MediaQuery.of(context).size.aspectRatio > 0.6 ? 0.25 : 0.25;
+    double fontSize = MediaQuery.of(context).size.aspectRatio > 0.6 ? 5 : 5;
     TextStyle titleStyle = MediaQuery.of(context).size.aspectRatio > 0.6
         ? TextStyle(
             color: Colors.white.withOpacity(0.8),
             fontWeight: FontWeight.bold,
-            fontSize: 14,
+            fontSize: 10,
           )
         : TextStyle(
             color: Colors.white.withOpacity(0.8),
             fontWeight: FontWeight.bold,
-            fontSize: 18,
+            fontSize: 10,
           );
     return PieChart(
       dataMap: dataMap,

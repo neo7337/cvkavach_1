@@ -10,6 +10,12 @@ class Countries {
   Countries(this.name, this.iso3);
 }
 
+class HistoryStruct {
+  final DateTime date;
+  final int count;
+  HistoryStruct(this.date, this.count);
+}
+
 class APIService {
   final API api = new API();
 
@@ -51,7 +57,8 @@ class APIService {
       responseMap['Recovered']=json.decode(response.body)["recovered"]["value"].toString();
       responseMap['Deaths']=json.decode(response.body)["deaths"]["value"].toString();
       responseMap['Active']=(json.decode(response.body)["confirmed"]["value"]-json.decode(response.body)["recovered"]["value"]-json.decode(response.body)["deaths"]["value"]).toString();
-      responseMap['LastUpdate']=json.decode(response.body)["lastUpdate"];
+      final String dateTime = json.decode(response.body)["lastUpdate"].toString().split('Z')[0];
+      responseMap['LastUpdate']=dateTime.toString().split('T')[0] + ' ' + dateTime.toString().split('T')[1];
       return responseMap;
     }
     print(
@@ -77,6 +84,44 @@ class APIService {
           countriesList[val.name.toString()]=val.iso3.toString()
       });
       return countriesList;
+    }
+    print(
+        'Countries Request $uri failed\nResponse: ${response.statusCode} ${response.reasonPhrase}');
+    throw response;
+  }
+
+  Future<List<List<HistoryStruct>>> getHistoricalData(String country) async {
+    final uri = api.historicalData(country);
+    print(uri);
+    final response = await http.get(
+      uri.toString(),
+      headers: {'Accept': 'application/json'}
+    );
+    if(response.statusCode == 200 ){
+      Map<String, dynamic> decodedMap = jsonDecode(response.body);
+      List<HistoryStruct> casesList = new List<HistoryStruct>();
+      List<HistoryStruct> deathsList = new List<HistoryStruct>();
+      List<HistoryStruct> recoveredList = new List<HistoryStruct>();
+      List<List<HistoryStruct>> historyData = new List<List<HistoryStruct>>();
+      for(var key in decodedMap['timeline']['cases'].keys) {
+        casesList.add(new HistoryStruct(new DateTime(int.parse("20"+key.toString().split("/")[2]), 
+        int.parse(key.toString().split("/")[0]), 
+          int.parse(key.toString().split("/")[1])), decodedMap['timeline']['cases'][key]));
+      }
+      historyData.add(casesList);
+      for(var key in decodedMap['timeline']['deaths'].keys) {
+        deathsList.add(new HistoryStruct(new DateTime(int.parse("20"+key.toString().split("/")[2]), 
+        int.parse(key.toString().split("/")[0]), 
+          int.parse(key.toString().split("/")[1])), decodedMap['timeline']['deaths'][key]));
+      }
+      historyData.add(deathsList);
+      for(var key in decodedMap['timeline']['recovered'].keys) {
+        recoveredList.add(new HistoryStruct(new DateTime(int.parse("20"+key.toString().split("/")[2]), 
+        int.parse(key.toString().split("/")[0]), 
+          int.parse(key.toString().split("/")[1])), decodedMap['timeline']['recovered'][key]));
+      }
+      historyData.add(recoveredList);
+      return historyData;
     }
     print(
         'Countries Request $uri failed\nResponse: ${response.statusCode} ${response.reasonPhrase}');

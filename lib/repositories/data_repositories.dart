@@ -43,4 +43,16 @@ class DataRepository {
     }
   }
 
+  Future<List<List<HistoryStruct>>> getHistoricData(String country) async {
+    try{
+      print('calling getHistoricalData datarepository ' + country);
+      return await apiService.getHistoricalData(country);
+    } on Response catch (response) {
+      if(response.statusCode == 401 ){
+        return await apiService.getHistoricalData(country);
+      }
+      rethrow;
+    }
+  }
+
 }
