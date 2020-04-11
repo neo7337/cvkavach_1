@@ -55,4 +55,16 @@ class DataRepository {
     }
   }
 
+  Future<SplayTreeMap<String, List<int>>> getLocaleData() async {
+    try{
+      print('calling getLocaleData datarepository ');
+      return await apiService.getLocaleData();
+    } on Response catch (response) {
+      if(response.statusCode == 401 ){
+        return await apiService.getLocaleData();
+      }
+      rethrow;
+    }
+  }
+
 }

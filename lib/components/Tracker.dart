@@ -36,11 +36,18 @@ class _TrackerWidget extends State<TrackerInfo> {
     super.initState();
   }
 
+  int _count = 0;
+  Future<Null> _handleRefresh() async {
+    await new Future.delayed(new Duration(seconds: 3));
+    setState(() {
+      _count += 5;
+    });
+    return null;
+  }
+
   Future<String> _updateData() async {
     final dataRepository = Provider.of<DataRepository>(context, listen: false);
     final responseMap = await dataRepository.getEndpointData();
-    //final countriesList = await dataRepository.getCountries();
-    print(responseMap);
     dataMap.putIfAbsent("active", () => double.parse(responseMap['Active']));
     dataMap.putIfAbsent("dead", () => double.parse(responseMap['Deaths']));
     dataMap.putIfAbsent("ok", () => double.parse(responseMap['Recovered']));
@@ -48,13 +55,12 @@ class _TrackerWidget extends State<TrackerInfo> {
     finalResponseMap.putIfAbsent("Recovered", () => responseMap['Recovered']);
     finalResponseMap.putIfAbsent("Deaths", () => responseMap['Deaths']);
     finalResponseMap.putIfAbsent("Active", () => responseMap['Active']);
-    finalResponseMap.putIfAbsent("LastUpdate", () => responseMap['LastUpdate']);
+    finalResponseMap.putIfAbsent("LastUpdate", () => responseMap['LastUpdated']);
     return Future.value("OK");
   }
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder<String>(
       future: _updateData(), // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {  // AsyncSnapshot<Your object type>
@@ -86,42 +92,42 @@ class _TrackerWidget extends State<TrackerInfo> {
     );
   }
 
-}
-
-Widget _buildBody(Map<String, double> dataMap, Map<String, String> responseMap) {
-  print('building widget ' + dataMap.toString() + ' ' + responseMap.toString());
-  return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          _CustomGraph(dataMap, "Cases Worldwide"),
-          Column(
-            children: <Widget>[
-              _StatTile(Color(0xffffffff), 'Total Cases', int.parse(responseMap['Confirmed'])),
-              _StatTile(Color(0xfff5c76a), 'Active', int.parse(responseMap['Active'])),
-              _StatTile(Color(0xffff653b), 'Deaths', int.parse(responseMap['Deaths'])),
-              _StatTile(Color(0xff9ff794), 'Recovered', int.parse(responseMap['Recovered'])),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text(
-                    'Last update ' + responseMap['LastUpdate'],
-                    style: TextStyle(
-                        color: Colors.white.withOpacity(0.4), 
-                        fontSize: 10, 
-                        decoration: TextDecoration.none),                  
-                   )
-                  )
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
+  Widget _buildBody(Map<String, double> dataMap, Map<String, String> responseMap) {
+    print('building widget ' + dataMap.toString() + ' ' + responseMap.toString());
+    return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            _CustomGraph(dataMap, "Cases Worldwide"),
+            Column(
+              children: <Widget>[
+                _StatTile(Color(0xffffffff), 'Total Cases', int.parse(responseMap['Confirmed'])),
+                _StatTile(Color(0xfff5c76a), 'Active', int.parse(responseMap['Active'])),
+                _StatTile(Color(0xffff653b), 'Deaths', int.parse(responseMap['Deaths'])),
+                _StatTile(Color(0xff9ff794), 'Recovered', int.parse(responseMap['Recovered'])),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(
+                      'Last update ' + responseMap['LastUpdate'],
+                      style: TextStyle(
+                          color: Colors.white.withOpacity(0.4), 
+                          fontSize: 10, 
+                          decoration: TextDecoration.none),                  
+                    )
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
     );
+  }
+
 }
 
 Widget _buildLoading() {

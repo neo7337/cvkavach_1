@@ -51,7 +51,6 @@ class _CountrySearchWidget extends State<CountrySearch> {
   Future<String> _fetchCountries() async {
     final dataRepository = Provider.of<DataRepository>(context, listen: false);
     final countriesList = await dataRepository.getCountries();
-    print('print'+countriesList.toString());
     _countriesList = countriesList;
     return Future.value("OK");
   }
@@ -59,7 +58,6 @@ class _CountrySearchWidget extends State<CountrySearch> {
   Future<String> fetchCountryData(String input) async {
     final dataRepository = Provider.of<DataRepository>(context, listen: false);
     responseMap = await dataRepository.getCountryInfo(input);
-    print('country info CountryData.dart' + responseMap.toString());
     dataMap["active"]=double.parse(responseMap['Active']);
     dataMap["dead"]=double.parse(responseMap['Deaths']);
     dataMap["ok"]=double.parse(responseMap['Recovered']);
@@ -67,7 +65,8 @@ class _CountrySearchWidget extends State<CountrySearch> {
     finalResponseMap["Recovered"]=responseMap['Recovered'];
     finalResponseMap["Deaths"]=responseMap['Deaths'];
     finalResponseMap["Active"]=responseMap['Active'];
-    finalResponseMap["LastUpdate"]=responseMap['LastUpdate'];
+    finalResponseMap["TestsTaken"]=responseMap["TestsTaken"];
+    finalResponseMap["LastUpdate"]=responseMap['LastUpdated'];
     return Future.value('OK');
   }
   
@@ -84,18 +83,27 @@ class _CountrySearchWidget extends State<CountrySearch> {
     return Future.value('OK');
   }
 
+  int _count = 0;
+  Future<Null> _handleRefresh() async {
+    await new Future.delayed(new Duration(seconds: 3));
+    setState(() {
+      _count += 5;
+    });
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<String>>(
       future: Future.wait([_fetchCountries(), fetchCountryData(dropdownValue), fetchHistoricalData(dropdownValue)]), // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {  // AsyncSnapshot<Your object type>
         if( snapshot.connectionState == ConnectionState.waiting){
-            return  _buildLoading();
+          return  _buildLoading();
         }else{
-            if (snapshot.hasError)
-              return _buildError(snapshot.error);
-            else
-              return _buildBody();  // snapshot.data  :- get your object which is pass from your downloadData() function
+          if (snapshot.hasError)
+            return _buildError(snapshot.error);
+          else
+            return _buildBody();  // snapshot.data  :- get your object which is pass from your downloadData() function
         }
       },
     );
@@ -118,7 +126,6 @@ class _CountrySearchWidget extends State<CountrySearch> {
   }
 
   Widget _buildBody() {
-  print('building widget ' + dataMap.toString() + ' ' + finalResponseMap.toString());
   return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -126,16 +133,18 @@ class _CountrySearchWidget extends State<CountrySearch> {
         children: <Widget>[
           Flexible(
             flex: 2,
-            child: _buildDropdown() ),
+            child: _buildDropdown() 
+          ),
           //_CustomGraph(dataMap, "Cases"),
           Flexible(
             flex: 2,
             child: Column(
             children: <Widget>[
               _StatTile(Color(0xffffffff), 'Total Cases', int.parse(finalResponseMap['Confirmed'])),
-              _StatTile(Color(0xfff5c76a), 'Active', int.parse(finalResponseMap['Active'])),
+              _StatTile(Color(0xff0000ff), 'Active', int.parse(finalResponseMap['Active'])),
               _StatTile(Color(0xffff653b), 'Deaths', int.parse(finalResponseMap['Deaths'])),
               _StatTile(Color(0xff9ff794), 'Recovered', int.parse(finalResponseMap['Recovered'])),
+              _StatTile(Color(0xfff5c76a), 'Tests Taken', int.parse(finalResponseMap['TestsTaken'])),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -288,7 +297,6 @@ class _CustomGraph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("aspect ratio" + MediaQuery.of(context).size.aspectRatio.toString());
     double chartRadiusFactor =
         MediaQuery.of(context).size.aspectRatio > 0.6 ? 0.25 : 0.25;
     double fontSize = MediaQuery.of(context).size.aspectRatio > 0.6 ? 5 : 5;

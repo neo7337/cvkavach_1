@@ -10,6 +10,14 @@ class Countries {
   Countries(this.name, this.iso3);
 }
 
+class RegionalData {
+  final String state;
+  final int total;
+  final int deaths;
+  final int recovered;
+  RegionalData(this.state, this.total, this.deaths, this.recovered);
+}
+
 class HistoryStruct {
   final DateTime date;
   final int count;
@@ -22,21 +30,23 @@ class APIService {
   HashMap<String, String> responseMap = new HashMap<String, String>();
   List<String> countriesMap = new List<String>();
   SplayTreeMap<String, String> countriesList = new SplayTreeMap<String, String>();
+  SplayTreeMap<String, List<int>> regionalDataList = new SplayTreeMap<String, List<int>>();
 
   Future<HashMap<String, String>> getEndpointData() async {
     final uri = api.endpointUri();
-    print(uri);
+    //print(uri);
     final response = await http.get(
       uri.toString(),
       headers: {'Accept': 'application/json'},
     );
     if (response.statusCode == 200) {
-      responseMap['Confirmed']=json.decode(response.body)["confirmed"]["value"].toString();
-      responseMap['Recovered']=json.decode(response.body)["recovered"]["value"].toString();
-      responseMap['Deaths']=json.decode(response.body)["deaths"]["value"].toString();
-      responseMap['Active']=(json.decode(response.body)["confirmed"]["value"]-json.decode(response.body)["recovered"]["value"]-json.decode(response.body)["deaths"]["value"]).toString();
-      final String dateTime = json.decode(response.body)["lastUpdate"].toString().split('Z')[0];
-      responseMap['LastUpdate']=dateTime.toString().split('T')[0] + ' ' + dateTime.toString().split('T')[1];
+      responseMap['Confirmed']=json.decode(response.body)["cases"].toString();
+      responseMap['Recovered']=json.decode(response.body)["recovered"].toString();
+      responseMap['Deaths']=json.decode(response.body)["deaths"].toString();
+      responseMap['Active']=json.decode(response.body)["active"].toString();
+      int timestamp = json.decode(response.body)["updated"];
+      var date = new DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
+      responseMap['LastUpdated']=date.toString();
       return responseMap;
     }
     print(
@@ -52,14 +62,40 @@ class APIService {
       headers: {'Accept': 'application/json'}
     );
     if(response.statusCode == 200){
-      print('country info '+ json.decode(response.body).toString());
-      responseMap['Confirmed']=json.decode(response.body)["confirmed"]["value"].toString();
-      responseMap['Recovered']=json.decode(response.body)["recovered"]["value"].toString();
-      responseMap['Deaths']=json.decode(response.body)["deaths"]["value"].toString();
-      responseMap['Active']=(json.decode(response.body)["confirmed"]["value"]-json.decode(response.body)["recovered"]["value"]-json.decode(response.body)["deaths"]["value"]).toString();
-      final String dateTime = json.decode(response.body)["lastUpdate"].toString().split('Z')[0];
-      responseMap['LastUpdate']=dateTime.toString().split('T')[0] + ' ' + dateTime.toString().split('T')[1];
+      responseMap['Confirmed']=json.decode(response.body)["cases"].toString();
+      responseMap['Recovered']=json.decode(response.body)["recovered"].toString();
+      responseMap['Deaths']=json.decode(response.body)["deaths"].toString();
+      responseMap['Active']=json.decode(response.body)["active"].toString();
+      responseMap['TestsTaken']=json.decode(response.body)["tests"].toString();
+      int timestamp = json.decode(response.body)["updated"];
+      var date = new DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
+      responseMap['LastUpdated']=date.toString();
       return responseMap;
+    }
+    print(
+        'Request $uri failed\nResponse: ${response.statusCode} ${response.reasonPhrase}');
+    throw response;
+  }
+
+  Future<SplayTreeMap<String, List<int>>> getLocaleData() async {
+    final uri = api.localeData();
+    print(uri);
+    final response = await http.get(
+      uri.toString(),
+      headers: {'Accept': 'application/json'}
+    );
+    if(response.statusCode == 200){
+      responseMap['Confirmed']=json.decode(response.body)["cases"].toString();
+      List<dynamic> regionalList = json.decode(response.body)["data"]["regional"];
+      List<RegionalData> regional = new List<RegionalData>();
+      regionalList.forEach((f) {
+        RegionalData s = APIService.newJsonMap(f);
+        regional.add(s);
+      });
+      regional.forEach( (val) => {
+        regionalDataList[val.state.toString()]=[val.total, val.deaths, val.recovered]
+      });
+      return regionalDataList;
     }
     print(
         'Request $uri failed\nResponse: ${response.statusCode} ${response.reasonPhrase}');
@@ -68,7 +104,7 @@ class APIService {
 
   Future<SplayTreeMap<String, String>> getCountries() async {
     final uri = api.countriesUri();
-    print(uri);
+    //print(uri);
     final response = await http.get(uri.toString(), headers: {'Accept': 'application/json'});
     if(response.statusCode == 200 ){
       print('Countries List fetched');
@@ -92,7 +128,7 @@ class APIService {
 
   Future<List<List<HistoryStruct>>> getHistoricalData(String country) async {
     final uri = api.historicalData(country);
-    print(uri);
+    //print(uri);
     final response = await http.get(
       uri.toString(),
       headers: {'Accept': 'application/json'}
@@ -134,4 +170,14 @@ class APIService {
     Countries s = new Countries(name, iso3);
     return s;
   }
+
+  static RegionalData newJsonMap(Map<String, dynamic> json) {
+    String state = json['loc'];
+    int total = json['totalConfirmed'];
+    int deaths = json['deaths'];
+    int recovered = json['discharged'];
+    return new RegionalData(state, total, deaths, recovered);
+  }
+
+
 }

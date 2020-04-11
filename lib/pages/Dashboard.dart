@@ -1,4 +1,5 @@
 import 'package:cvkavach/components/CountrySearch.dart';
+import 'package:cvkavach/components/LocaleData.dart';
 import 'package:cvkavach/components/Tracker.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  String display;
   int _selectedIndex = 0;
   static TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -20,7 +22,8 @@ class _DashboardState extends State<Dashboard> {
     //Event(),
     Tracker(),
     CountrySearchProvider(),
-    //Account()
+    //Account(),
+    LocaleDataProvider()
   ];
 
   void _onItemTapped(int index) {
@@ -35,6 +38,8 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    Locale myLocale = Localizations.localeOf(context);
+    //print("Locale CountryCode" + myLocale.countryCode.toString());
     return Scaffold(
       appBar: AppBar(
         title: const Text('cvkavach'),
@@ -61,6 +66,10 @@ class _DashboardState extends State<Dashboard> {
             icon: Icon(Icons.search),
             title: Text('Search')
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.remove_red_eye),
+            title: Text('Locale Data')
+          )
           /*BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
             title: Text('Account')
