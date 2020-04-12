@@ -37,6 +37,15 @@ class _LocaleDataWidget extends State<LocaleData>{
     return Future.value("OK");
   }
 
+  int _count = 0;
+  Future<Null> _handleRefresh() async {
+    await new Future.delayed(new Duration(seconds: 1));
+    setState(() {
+      _count += 5;
+    });
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<String>>(
@@ -96,17 +105,20 @@ class _LocaleDataWidget extends State<LocaleData>{
   Widget _buildBody() {
     return new Scaffold(
       backgroundColor: Color(0xFF101010),
-      body: new SafeArea(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child:  ListView(
-                  padding: const EdgeInsets.all(20.0),
-                  children: _getListings(),
-                ),
-              )
-            ]
+      body: RefreshIndicator(
+        onRefresh: _handleRefresh,
+          child:new SafeArea(
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child:  ListView(
+                    padding: const EdgeInsets.all(20.0),
+                    children: _getListings(),
+                  ),
+                )
+              ]
+            )
           )
         )
       )

@@ -32,13 +32,15 @@ class _TrackerWidget extends State<TrackerInfo> {
   List<String> countriesList = new List<String>();
   final Map<String, double> dataMap = new Map<String, double>();
   final Map<String, String> finalResponseMap = new Map<String, String>();
+  
   void initState(){
+    print('resfers');
     super.initState();
   }
 
   int _count = 0;
   Future<Null> _handleRefresh() async {
-    await new Future.delayed(new Duration(seconds: 3));
+    await new Future.delayed(new Duration(seconds: 1));
     setState(() {
       _count += 5;
     });
@@ -94,37 +96,46 @@ class _TrackerWidget extends State<TrackerInfo> {
 
   Widget _buildBody(Map<String, double> dataMap, Map<String, String> responseMap) {
     print('building widget ' + dataMap.toString() + ' ' + responseMap.toString());
-    return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            _CustomGraph(dataMap, "Cases Worldwide"),
-            Column(
+    return RefreshIndicator(
+      onRefresh: _handleRefresh,
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Container(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                _StatTile(Color(0xffffffff), 'Total Cases', int.parse(responseMap['Confirmed'])),
-                _StatTile(Color(0xfff5c76a), 'Active', int.parse(responseMap['Active'])),
-                _StatTile(Color(0xffff653b), 'Deaths', int.parse(responseMap['Deaths'])),
-                _StatTile(Color(0xff9ff794), 'Recovered', int.parse(responseMap['Recovered'])),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(
-                      'Last update ' + responseMap['LastUpdate'],
-                      style: TextStyle(
-                          color: Colors.white.withOpacity(0.4), 
-                          fontSize: 10, 
-                          decoration: TextDecoration.none),                  
-                    )
-                    )
+                _CustomGraph(dataMap, "Cases Worldwide"),
+                Column(
+                  children: <Widget>[
+                    _StatTile(Color(0xffffffff), 'Total Cases', int.parse(responseMap['Confirmed'])),
+                    _StatTile(Color(0xfff5c76a), 'Active', int.parse(responseMap['Active'])),
+                    _StatTile(Color(0xffff653b), 'Deaths', int.parse(responseMap['Deaths'])),
+                    _StatTile(Color(0xff9ff794), 'Recovered', int.parse(responseMap['Recovered'])),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          'Last update ' + responseMap['LastUpdate'],
+                          style: TextStyle(
+                              color: Colors.white.withOpacity(0.4), 
+                              fontSize: 10, 
+                              decoration: TextDecoration.none),                  
+                        )
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+          height: MediaQuery.of(context).size.height,
+        )
+      )
     );
   }
 

@@ -35,15 +35,16 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
   }
-
+final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     Locale myLocale = Localizations.localeOf(context);
-    //print("Locale CountryCode" + myLocale.countryCode.toString());
+    print("Locale CountryCode" + myLocale.countryCode.toString());
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         title: const Text('cvkavach'),
-        centerTitle: true,
+        centerTitle: true
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),

@@ -85,7 +85,7 @@ class _CountrySearchWidget extends State<CountrySearch> {
 
   int _count = 0;
   Future<Null> _handleRefresh() async {
-    await new Future.delayed(new Duration(seconds: 3));
+    await new Future.delayed(new Duration(seconds: 1));
     setState(() {
       _count += 5;
     });
@@ -126,51 +126,62 @@ class _CountrySearchWidget extends State<CountrySearch> {
   }
 
   Widget _buildBody() {
-  return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Flexible(
-            flex: 2,
-            child: _buildDropdown() 
-          ),
-          //_CustomGraph(dataMap, "Cases"),
-          Flexible(
-            flex: 2,
+  return RefreshIndicator(
+      onRefresh: _handleRefresh,
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Container(
+          child:Center(
             child: Column(
-            children: <Widget>[
-              _StatTile(Color(0xffffffff), 'Total Cases', int.parse(finalResponseMap['Confirmed'])),
-              _StatTile(Color(0xff0000ff), 'Active', int.parse(finalResponseMap['Active'])),
-              _StatTile(Color(0xffff653b), 'Deaths', int.parse(finalResponseMap['Deaths'])),
-              _StatTile(Color(0xff9ff794), 'Recovered', int.parse(finalResponseMap['Recovered'])),
-              _StatTile(Color(0xfff5c76a), 'Tests Taken', int.parse(finalResponseMap['TestsTaken'])),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text(
-                    'Last update ' + finalResponseMap['LastUpdate'],
-                    style: TextStyle(
-                        color: Colors.white.withOpacity(0.4), 
-                        fontSize: 10, 
-                        decoration: TextDecoration.none),                  
-                    )
-                  )
-                ],
-              ),
-            ],
-          ) ),
-          Flexible(
-            flex: 2,
-            child: StackedAreaLineChart(
-            _createSampleData(c1, d1, r1),
-            // Disable animations for image tests.
-            animate: true,
-          ) )
-        ],
-      ),
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Flexible(
+                  flex: 1,
+                  child: _buildDropdown() 
+                ),
+                //_CustomGraph(dataMap, "Cases"),
+                Flexible(
+                  flex: 1,
+                  child: StackedAreaLineChart(
+                    _createSampleData(c1, d1, r1),
+                    // Disable animations for image tests.
+                    animate: true,
+                  ) 
+                ),
+                Flexible(
+                  flex: 2,
+                  child: Column(
+                    children: <Widget>[
+                      _StatTile(Color(0xffffffff), 'Total Cases', int.parse(finalResponseMap['Confirmed'])),
+                      _StatTile(Color(0xff0000ff), 'Active', int.parse(finalResponseMap['Active'])),
+                      _StatTile(Color(0xffff653b), 'Deaths', int.parse(finalResponseMap['Deaths'])),
+                      _StatTile(Color(0xff9ff794), 'Recovered', int.parse(finalResponseMap['Recovered'])),
+                      _StatTile(Color(0xfff5c76a), 'Tests Taken', int.parse(finalResponseMap['TestsTaken'])),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Text(
+                            'Last update ' + finalResponseMap['LastUpdate'],
+                            style: TextStyle(
+                                color: Colors.white.withOpacity(0.4), 
+                                fontSize: 10, 
+                                decoration: TextDecoration.none),                  
+                            )
+                          )
+                        ],
+                      ),
+                    ],
+                  ) 
+                ),
+              ],
+            )
+          ),
+          height: MediaQuery.of(context).size.height,
+        )
+      )
     );
   }
   
