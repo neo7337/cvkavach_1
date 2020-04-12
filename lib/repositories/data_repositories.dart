@@ -55,13 +55,49 @@ class DataRepository {
     }
   }
 
-  Future<SplayTreeMap<String, List<int>>> getLocaleData() async {
+  Future<SplayTreeMap<int, List<String>>> getLocaleData() async {
     try{
       print('calling getLocaleData datarepository ');
       return await apiService.getLocaleData();
     } on Response catch (response) {
       if(response.statusCode == 401 ){
         return await apiService.getLocaleData();
+      }
+      rethrow;
+    }
+  }
+
+  /* Future<> getDistrictData() async {
+    try{
+      print('calling getDistrictData datarepository ');
+      return await apiService.getDistrictData();
+    } on Response catch (response) {
+      if(response.statusCode == 401 ){
+        return await apiService.getDistrictData();
+      }
+      rethrow;
+    }
+  } */
+
+  Future<List<List<HistoryStruct>>> getHistoricalDataInd() async {
+    try{
+      print('calling getDistrictData datarepository ');
+      return await apiService.getHistoricalDataInd();
+    } on Response catch (response) {
+      if(response.statusCode == 401 ){
+        return await apiService.getHistoricalDataInd();
+      }
+      rethrow;
+    }
+  }
+
+  Future<HashMap<String, String>> getCountryInfoInd() async {
+    try{
+      print('calling getCountryInfoInd datarepository ');
+      return await apiService.getCountryInfoInd();
+    } on Response catch (response) {
+      if(response.statusCode == 401 ){
+        return await apiService.getCountryInfoInd();
       }
       rethrow;
     }

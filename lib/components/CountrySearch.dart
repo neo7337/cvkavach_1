@@ -57,10 +57,12 @@ class _CountrySearchWidget extends State<CountrySearch> {
 
   Future<String> fetchCountryData(String input) async {
     final dataRepository = Provider.of<DataRepository>(context, listen: false);
-    responseMap = await dataRepository.getCountryInfo(input);
-    dataMap["active"]=double.parse(responseMap['Active']);
-    dataMap["dead"]=double.parse(responseMap['Deaths']);
-    dataMap["ok"]=double.parse(responseMap['Recovered']);
+    if(input == 'IND'){
+      responseMap = await dataRepository.getCountryInfoInd();
+    } else {
+      responseMap = await dataRepository.getCountryInfo(input);
+    }
+    //responseMap = await dataRepository.getCountryInfo(input);
     finalResponseMap["Confirmed"]=responseMap['Confirmed'];
     finalResponseMap["Recovered"]=responseMap['Recovered'];
     finalResponseMap["Deaths"]=responseMap['Deaths'];
@@ -76,7 +78,12 @@ class _CountrySearchWidget extends State<CountrySearch> {
 
   Future<String> fetchHistoricalData(String input) async {
     final dataRepository = Provider.of<DataRepository>(context, listen: false);
-    historyMapList = await dataRepository.getHistoricData(input);
+    if(input == 'IND'){
+      historyMapList = await dataRepository.getHistoricalDataInd();
+    } else {
+      historyMapList = await dataRepository.getHistoricData(input);
+    }
+    //print(historyMapList.toString());
     c1 = historyMapList[0];
     d1 = historyMapList[1];
     r1 = historyMapList[2];

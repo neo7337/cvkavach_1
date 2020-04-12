@@ -8,6 +8,10 @@ class API {
   static final String jhuBasePath = 'v2/historical';
   static final String localeHost = 'api.rootnet.in';
   static final String localePath = 'covid19-in/stats/latest';
+  static final String districtIndHost = 'api.covid19india.org';
+  static final String districtIndPath = 'v2/state_district_wise.json';
+  static final String historicalINDHost = 'api.covid19india.org';
+  static final String historicalINDPath = 'data.json';
 
   Uri endpointUri() => Uri(
     scheme: 'https',
@@ -35,7 +39,19 @@ class API {
 
   Uri localeData() => Uri(
     scheme:'https',
-    host: localeHost,
-    path: '$localePath'
+    host: historicalINDHost,
+    path: '$historicalINDPath'
+  );
+
+  Uri districtData() => Uri(
+    scheme: 'https',
+    host: districtIndHost,
+    path: '$districtIndPath'
+  );
+
+  Uri getHistoricalIndia() => Uri(
+    scheme: 'https',
+    host: historicalINDHost,
+    path: '$historicalINDPath'
   );
 }

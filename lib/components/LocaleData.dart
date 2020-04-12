@@ -29,7 +29,7 @@ class _LocaleDataWidget extends State<LocaleData>{
     super.initState();
   }
 
-  SplayTreeMap<String, List<int>> localList = new SplayTreeMap<String, List<int>>();
+  SplayTreeMap<int, List<String>> localList = new SplayTreeMap<int, List<String>>();
   
   Future<String> _fetchLocaleData() async {
     final dataRepository = Provider.of<DataRepository>(context, listen: false);
@@ -127,12 +127,11 @@ class _LocaleDataWidget extends State<LocaleData>{
 
   List<Widget> _getListings() { 
     List listings = new List<Widget>();
-    localList.forEach((k, v){
-      listings.add(
-        _StatTile(k, v),
-      );
-    });
-     return listings;
+    var list = localList.values.toList();
+    for(var i =localList.length-2; i>=0; i--) {
+      listings.add(_StatTile(list[i]));
+    }
+    return listings;
   }
 
   Widget column = Expanded(
@@ -148,10 +147,9 @@ class _LocaleDataWidget extends State<LocaleData>{
 }
 
 class _StatTile extends StatelessWidget {
-  final String state;
-  final List<int> value;
+  final List<String> value;
 
-  _StatTile(this.state, this.value);
+  _StatTile(this.value);
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +174,7 @@ class _StatTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(
-                    child: Text(state, 
+                    child: Text(value[0], 
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -209,7 +207,7 @@ class _StatTile extends StatelessWidget {
                 ],
               ),
               Text(
-                value[0].toString().replaceAllMapped(reg, mathFunc),
+                value[1].toString().replaceAllMapped(reg, mathFunc),
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -240,7 +238,7 @@ class _StatTile extends StatelessWidget {
                 ],
               ),
               Text(
-                value[1].toString().replaceAllMapped(reg, mathFunc),
+                value[2].toString().replaceAllMapped(reg, mathFunc),
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -271,7 +269,7 @@ class _StatTile extends StatelessWidget {
                 ],
               ),
               Text(
-                value[2].toString().replaceAllMapped(reg, mathFunc),
+                value[3].toString().replaceAllMapped(reg, mathFunc),
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
