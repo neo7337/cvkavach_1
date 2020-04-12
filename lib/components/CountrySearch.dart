@@ -121,7 +121,7 @@ class _CountrySearchWidget extends State<CountrySearch> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(
-          "cvkavach",
+          "CVKAVACH",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         centerTitle: true,

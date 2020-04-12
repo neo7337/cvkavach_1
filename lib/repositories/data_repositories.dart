@@ -67,7 +67,7 @@ class DataRepository {
     }
   }
 
-  /* Future<> getDistrictData() async {
+  Future<HashMap<String, List<DistrictData>>> getDistrictData() async {
     try{
       print('calling getDistrictData datarepository ');
       return await apiService.getDistrictData();
@@ -77,7 +77,7 @@ class DataRepository {
       }
       rethrow;
     }
-  } */
+  }
 
   Future<List<List<HistoryStruct>>> getHistoricalDataInd() async {
     try{

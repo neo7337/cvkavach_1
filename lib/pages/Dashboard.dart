@@ -43,7 +43,7 @@ final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: const Text('cvkavach'),
+        title: const Text('CVKAVACH'),
         centerTitle: true
       ),
       body: Center(

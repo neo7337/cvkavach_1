@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:cvkavach/components/StateDetail.dart';
 import 'package:cvkavach/repositories/data_repositories.dart';
 import 'package:cvkavach/services/api_service.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
@@ -30,10 +31,17 @@ class _LocaleDataWidget extends State<LocaleData>{
   }
 
   SplayTreeMap<int, List<String>> localList = new SplayTreeMap<int, List<String>>();
+  HashMap<String, List<DistrictData>> districtData = new HashMap<String, List<DistrictData>>();
   
   Future<String> _fetchLocaleData() async {
     final dataRepository = Provider.of<DataRepository>(context, listen: false);
     localList = await dataRepository.getLocaleData();
+    return Future.value("OK");
+  }
+
+  Future<String> _fetchDistrictData() async {
+    final dataRepository = Provider.of<DataRepository>(context, listen: false);
+    districtData = await dataRepository.getDistrictData();
     return Future.value("OK");
   }
 
@@ -49,7 +57,7 @@ class _LocaleDataWidget extends State<LocaleData>{
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<String>>(
-      future: Future.wait([_fetchLocaleData()]), // function where you call your api
+      future: Future.wait([_fetchLocaleData(), _fetchDistrictData()]), // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {  // AsyncSnapshot<Your object type>
         if( snapshot.connectionState == ConnectionState.waiting){
           return  _buildLoading();
@@ -68,7 +76,7 @@ class _LocaleDataWidget extends State<LocaleData>{
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(
-          "cvkavach",
+          "CVKAVACH",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         centerTitle: true,
@@ -105,13 +113,13 @@ class _LocaleDataWidget extends State<LocaleData>{
   Widget _buildBody() {
     return new Scaffold(
       backgroundColor: Color(0xFF101010),
-      body: RefreshIndicator(
+      body: RefreshIndicator (
         onRefresh: _handleRefresh,
-          child:new SafeArea(
-          child: Container(
-            child: Column(
-              children: <Widget>[
-                Expanded(
+          child:new SafeArea (
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  Expanded(
                   child:  ListView(
                     padding: const EdgeInsets.all(20.0),
                     children: _getListings(),
@@ -129,7 +137,7 @@ class _LocaleDataWidget extends State<LocaleData>{
     List listings = new List<Widget>();
     var list = localList.values.toList();
     for(var i =localList.length-2; i>=0; i--) {
-      listings.add(_StatTile(list[i]));
+      listings.add(_StatTile(list[i], districtData));
     }
     return listings;
   }
@@ -148,15 +156,23 @@ class _LocaleDataWidget extends State<LocaleData>{
 
 class _StatTile extends StatelessWidget {
   final List<String> value;
+  final HashMap<String, List<DistrictData>> distData;
 
-  _StatTile(this.value);
+  _StatTile(this.value, this.distData);
 
   @override
   Widget build(BuildContext context) {
     RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
     Function mathFunc = (Match match) => '${match[1]},';
-
-    return Container(
+    print("distrse" + distData.toString());
+    return InkWell(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StateDetailPage(distData[value[0]]),
+              ),
+            ),
+            child: Container(
       padding: EdgeInsets.symmetric(vertical: 12, horizontal: 4),
       decoration: BoxDecoration(
         border: Border(
@@ -280,6 +296,7 @@ class _StatTile extends StatelessWidget {
           )
         ]
       )
+            )
     );
   }
 }

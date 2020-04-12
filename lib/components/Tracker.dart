@@ -34,7 +34,6 @@ class _TrackerWidget extends State<TrackerInfo> {
   final Map<String, String> finalResponseMap = new Map<String, String>();
   
   void initState(){
-    print('resfers');
     super.initState();
   }
 
@@ -83,7 +82,7 @@ class _TrackerWidget extends State<TrackerInfo> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(
-          "cvkavach",
+          "CVKAVACH",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         centerTitle: true,

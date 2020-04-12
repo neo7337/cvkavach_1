@@ -24,6 +24,12 @@ class HistoryStruct {
   HistoryStruct(this.date, this.count);
 }
 
+class DistrictData {
+  final String district;
+  final int confirmed;
+  DistrictData(this.district, this.confirmed);
+}
+
 var year = 2020;
 var months = {'January':'1','February':'2','March':'3','April':'4','May':'5','June':'6',
 'July':'7','August':'8','September':'9','October':'10','November':'11','Decemeber':'12'};
@@ -36,7 +42,8 @@ class APIService {
   SplayTreeMap<String, String> countriesList = new SplayTreeMap<String, String>();
   SplayTreeMap<int, List<String>> regionalDataList = new SplayTreeMap<int, List<String>>();
   SplayTreeMap<int, HashMap<String, List<int>>> finalRegionalList = new SplayTreeMap<int, HashMap<String, List<int>>>();
-  
+  HashMap<String, List<DistrictData>> districtResponse = new HashMap<String, List<DistrictData>>();
+
   Future<HashMap<String, String>> getEndpointData() async {
     final uri = api.endpointUri();
     //print(uri);
@@ -165,6 +172,31 @@ class APIService {
     throw response;
   }
 
+  Future<HashMap<String, List<DistrictData>>> getDistrictData() async {
+    final uri = api.districtData();
+    print(uri);
+    final response = await http.get(
+      uri.toString(),
+      headers: {'Accept': 'application/json'}
+    );
+    if(response.statusCode == 200 ){
+      List<dynamic> indDist = jsonDecode(response.body);      
+      indDist.forEach((f){
+        List<dynamic> ls = f["districtData"];
+        List<DistrictData> distList = new List<DistrictData>();
+        ls.forEach((val){
+          DistrictData d = APIService.disJson(val);
+          distList.add(d);
+        });
+        districtResponse[f["state"]]=distList;
+      });
+      return districtResponse;
+    }
+    print(
+        'Countries Request $uri failed\nResponse: ${response.statusCode} ${response.reasonPhrase}');
+    throw response;
+  }
+
   Future<HashMap<String, String>> getCountryInfoInd() async {
     final uri = api.getHistoricalIndia();
     //print(uri);
@@ -248,6 +280,13 @@ class APIService {
     String recovered = json['totalrecovered'].toString();
     return new IndHistoricData(date, cases, deaths, recovered);
   }
+  
+  static DistrictData disJson(Map<String, dynamic> json) {
+    String district = json["district"];
+    int confirmed = json["confirmed"];
+    return new DistrictData(district, confirmed);
+  }
+
 }
 
 class IndHistoricData {
