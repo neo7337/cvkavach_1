@@ -164,7 +164,7 @@ class _StatTile extends StatelessWidget {
   Widget build(BuildContext context) {
     RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
     Function mathFunc = (Match match) => '${match[1]},';
-    print("distrse" + distData.toString());
+    //print("distrse" + distData.toString());
     return InkWell(
             onTap: () => Navigator.push(
               context,

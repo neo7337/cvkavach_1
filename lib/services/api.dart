@@ -2,8 +2,8 @@ class API {
   static final String host = 'covid19.mathdro.id';
   static final String basePath = 'api/';
   static final String countriesPath = 'api/countries';
-  static final String jhuAllPath = 'all';
-  static final String jhucountriesPath = 'countries';
+  static final String jhuAllPath = 'v2/all';
+  static final String jhucountriesPath = 'v2/countries';
   static final String jhuHost = 'corona.lmao.ninja';
   static final String jhuBasePath = 'v2/historical';
   static final String localeHost = 'api.rootnet.in';
