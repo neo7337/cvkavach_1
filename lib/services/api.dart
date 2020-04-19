@@ -12,6 +12,7 @@ class API {
   static final String districtIndPath = 'v2/state_district_wise.json';
   static final String historicalINDHost = 'api.covid19india.org';
   static final String historicalINDPath = 'data.json';
+  static final String jhuAllBase = 'v2/jhucsse';
 
   Uri endpointUri() => Uri(
     scheme: 'https',
@@ -53,5 +54,11 @@ class API {
     scheme: 'https',
     host: historicalINDHost,
     path: '$historicalINDPath'
+  );
+
+  Uri getProvinceData() => Uri(
+    scheme: 'https',
+    host: jhuHost,
+    path: '$jhuAllBase'
   );
 }

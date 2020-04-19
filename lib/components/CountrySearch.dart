@@ -108,7 +108,7 @@ class _CountrySearchWidget extends State<CountrySearch> {
           return  _buildLoading();
         }else{
           if (snapshot.hasError)
-            return _buildError(snapshot.error);
+            return _buildError();
           else
             return _buildBody();  // snapshot.data  :- get your object which is pass from your downloadData() function
         }
@@ -116,19 +116,18 @@ class _CountrySearchWidget extends State<CountrySearch> {
     );
   }
 
-  Widget _buildError(Widget error) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: Text(
-          "CVKAVACH",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-      ),
-      body: error,
+  Widget _buildError() {
+    print("build error");
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(FeatherIcons.alertCircle, size: 48, color: Color(0xffff653b)),
+          SizedBox(height: 14),
+          Text('Please update the app to fix the issue', style: TextStyle(fontSize: 14, color: Colors.white, decoration: TextDecoration.none))
+        ],
+      )
     );
   }
 
@@ -217,7 +216,6 @@ class _CountrySearchWidget extends State<CountrySearch> {
             style: TextStyle(color: Colors.white),
             onChanged: (String newValue) {
               setState(() => dropdownValue = newValue);
-              //fetchCountryData(dropdownValue);
             },
             items: _countriesList
                 .map((description, value) {

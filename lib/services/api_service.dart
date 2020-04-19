@@ -41,6 +41,7 @@ class APIService {
   List<String> countriesMap = new List<String>();
   SplayTreeMap<String, String> countriesList = new SplayTreeMap<String, String>();
   SplayTreeMap<int, List<String>> regionalDataList = new SplayTreeMap<int, List<String>>();
+  SplayTreeMap<int, List<String>> provincesData = new SplayTreeMap<int, List<String>>();
   SplayTreeMap<int, HashMap<String, List<int>>> finalRegionalList = new SplayTreeMap<int, HashMap<String, List<int>>>();
   HashMap<String, List<DistrictData>> districtResponse = new HashMap<String, List<DistrictData>>();
 
@@ -113,6 +114,26 @@ class APIService {
     throw response;
   }
 
+  Future<List<String>> getProvinces(String country) async {
+    final uri = api.historicalData(country);
+    final response = await http.get(
+      uri.toString(),
+      headers: {'Accept': 'application/json'}
+    );
+    if(response.statusCode == 200){
+      Map<String, dynamic> decodedMap = json.decode(response.body);
+      List<dynamic> prov = decodedMap["provinces"];
+      List<String> provinces = new List<String>();
+      prov.forEach((f) {
+        provinces.add(f);
+      });
+      return provinces;
+    }
+    print(
+        'Request $uri failed\nResponse: ${response.statusCode} ${response.reasonPhrase}');
+    throw response;
+  }
+
   Future<SplayTreeMap<String, String>> getCountries() async {
     final uri = api.countriesUri();
     //print(uri);
@@ -174,7 +195,7 @@ class APIService {
 
   Future<HashMap<String, List<DistrictData>>> getDistrictData() async {
     final uri = api.districtData();
-    print(uri);
+    //print(uri);
     final response = await http.get(
       uri.toString(),
       headers: {'Accept': 'application/json'}
@@ -257,6 +278,39 @@ class APIService {
     throw response;
   }
 
+  Future<SplayTreeMap<int, List<String>>> getProvinceData(String country) async {
+    final uri = api.getProvinceData();
+    final response = await http.get(
+      uri.toString(),
+      headers: {'Accept': 'application/json'}
+    );
+    if(response.statusCode == 200 ){
+      List<dynamic> decodedMap = jsonDecode(response.body);
+      List<PVDataStruct> pvData = new List<PVDataStruct>();
+      decodedMap.forEach((v){
+        if(v['country'] == country){
+          PVDataStruct s = APIService.pvJsonMap(v);
+          pvData.add(s);
+        }        
+      });
+      pvData.forEach((v) => {
+        provincesData[int.parse(v.total)]=[v.province, v.total, v.deaths, v.recovered]
+      });
+      return provincesData;
+    }
+    print(
+        'Countries Request $uri failed\nResponse: ${response.statusCode} ${response.reasonPhrase}');
+    throw response;
+  }
+
+  static PVDataStruct pvJsonMap(Map<String, dynamic> json) {
+    String province = json['province'].toString();
+    String total = json['stats']['confirmed'].toString();
+    String deaths = json['stats']['deaths'].toString();
+    String recovered = json['stats']['recovered'].toString();
+    return new PVDataStruct(province, total, deaths, recovered);
+  }
+
   static Countries fromJsonMap(Map<String, dynamic> json) {
     String name = json['name'];
     String iso3 = json['iso3'];
@@ -287,6 +341,14 @@ class APIService {
     return new DistrictData(district, confirmed);
   }
 
+}
+
+class PVDataStruct {
+  final String province;
+  final String total;
+  final String deaths;
+  final String recovered;
+  PVDataStruct(this.province, this.total, this.deaths, this.recovered);
 }
 
 class IndHistoricData {

@@ -33,7 +33,7 @@ class DataRepository {
 
   Future<HashMap<String, String>> getCountryInfo(String country) async {
     try{
-      print('calling getCountryInfo datarepository ' + country);
+      //print('calling getCountryInfo datarepository ' + country);
       return await apiService.getCountryInfo(country);
     } on Response catch (response) {
       if(response.statusCode == 401 ){
@@ -45,7 +45,7 @@ class DataRepository {
 
   Future<List<List<HistoryStruct>>> getHistoricData(String country) async {
     try{
-      print('calling getHistoricalData datarepository ' + country);
+      //print('calling getHistoricalData datarepository ' + country);
       return await apiService.getHistoricalData(country);
     } on Response catch (response) {
       if(response.statusCode == 401 ){
@@ -57,7 +57,7 @@ class DataRepository {
 
   Future<SplayTreeMap<int, List<String>>> getLocaleData() async {
     try{
-      print('calling getLocaleData datarepository ');
+      //print('calling getLocaleData datarepository ');
       return await apiService.getLocaleData();
     } on Response catch (response) {
       if(response.statusCode == 401 ){
@@ -69,7 +69,7 @@ class DataRepository {
 
   Future<HashMap<String, List<DistrictData>>> getDistrictData() async {
     try{
-      print('calling getDistrictData datarepository ');
+      //print('calling getDistrictData datarepository ');
       return await apiService.getDistrictData();
     } on Response catch (response) {
       if(response.statusCode == 401 ){
@@ -81,7 +81,7 @@ class DataRepository {
 
   Future<List<List<HistoryStruct>>> getHistoricalDataInd() async {
     try{
-      print('calling getDistrictData datarepository ');
+      //print('calling getDistrictData datarepository ');
       return await apiService.getHistoricalDataInd();
     } on Response catch (response) {
       if(response.statusCode == 401 ){
@@ -93,7 +93,7 @@ class DataRepository {
 
   Future<HashMap<String, String>> getCountryInfoInd() async {
     try{
-      print('calling getCountryInfoInd datarepository ');
+      //print('calling getCountryInfoInd datarepository ');
       return await apiService.getCountryInfoInd();
     } on Response catch (response) {
       if(response.statusCode == 401 ){
@@ -103,4 +103,27 @@ class DataRepository {
     }
   }
 
+  Future<List<String>> getProvinces(String country) async {
+    try{
+      //print('calling fetchingprovinces datarepository ');
+      return await apiService.getProvinces(country);
+    } on Response catch (response) {
+      if(response.statusCode == 401 ){
+        return await apiService.getProvinces(country);
+      }
+      rethrow;
+    }
+  }
+
+  Future<SplayTreeMap<int, List<String>>> getProvinceData(String country) async {
+    try{
+      //print('calling getProvinceData datarepository ');
+      return await apiService.getProvinceData(country);
+    } on Response catch (response) {
+      if(response.statusCode == 401 ){
+        return await apiService.getProvinceData(country);
+      }
+      rethrow;
+    }
+  }
 }

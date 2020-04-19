@@ -4,12 +4,9 @@ import 'package:cvkavach/components/Tracker.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {
-
   Dashboard({Key key}) : super(key: key);
-
   @override
   _DashboardState createState() => _DashboardState();
-
 }
 
 class _DashboardState extends State<Dashboard> {
@@ -18,11 +15,8 @@ class _DashboardState extends State<Dashboard> {
   static TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
-    //Home(),
-    //Event(),
     Tracker(),
     CountrySearchProvider(),
-    //Account(),
     LocaleDataProvider()
   ];
 
@@ -38,8 +32,6 @@ class _DashboardState extends State<Dashboard> {
 final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    Locale myLocale = Localizations.localeOf(context);
-    print("Locale CountryCode" + myLocale.countryCode.toString());
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -51,14 +43,6 @@ final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          /*BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            title: Text('Event'),
-          ),*/
           BottomNavigationBarItem(
             icon: Icon(Icons.language),
             title: Text('Tracker'),
@@ -71,10 +55,6 @@ final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
             icon: Icon(Icons.remove_red_eye),
             title: Text('Locale Data')
           )
-          /*BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            title: Text('Account')
-          )*/
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
