@@ -8,6 +8,4 @@ We use user's location to fetch the locale data as per his country location, pro
 
 For India, we have the district data as well provided in order to get numbers more locally.
 
-The application is also live on play store as well : https://play.google.com/store/apps/details?id=com.app.cvkavach
-
 ![cvkavach Demo](demo/demoApp.gif)
