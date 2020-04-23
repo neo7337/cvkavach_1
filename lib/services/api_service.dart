@@ -53,6 +53,7 @@ class APIService {
       headers: {'Accept': 'application/json'},
     );
     if (response.statusCode == 200) {
+      //print(json.decode(response.body));
       responseMap['Confirmed']=json.decode(response.body)["cases"].toString();
       responseMap['Recovered']=json.decode(response.body)["recovered"].toString();
       responseMap['Deaths']=json.decode(response.body)["deaths"].toString();

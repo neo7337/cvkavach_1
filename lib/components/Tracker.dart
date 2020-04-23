@@ -54,6 +54,8 @@ class _TrackerWidget extends State<TrackerInfo> {
   Future<String> _updateData() async {
     final dataRepository = Provider.of<DataRepository>(context, listen: false);
     final responseMap = await dataRepository.getEndpointData();
+    print("Data fetched Successfully");
+    print(responseMap.toString());
     dataMap.putIfAbsent("active", () => double.parse(responseMap['Active']));
     dataMap.putIfAbsent("dead", () => double.parse(responseMap['Deaths']));
     dataMap.putIfAbsent("ok", () => double.parse(responseMap['Recovered']));
@@ -70,8 +72,11 @@ class _TrackerWidget extends State<TrackerInfo> {
     String error;
     Location location = new Location();
     try {
+      print("Getting Location");
       myLocation = await location.getLocation();
+      print(myLocation.toString());
     } on PlatformException catch (e) {
+      print(e.toString());
       if (e.code == 'PERMISSION_DENIED') {
         error = 'please grant permission';
         print(error);
@@ -83,14 +88,16 @@ class _TrackerWidget extends State<TrackerInfo> {
       myLocation = null;
     }
     //currentLocation = myLocation;
+    print("test");
     final coordinates = new Coordinates(
         myLocation.latitude, myLocation.longitude);
     var addresses = await Geocoder.local.findAddressesFromCoordinates(
         coordinates);
+    print("Addressed : " + addresses.toString());
     var first = addresses.first;
     var addressList = first.addressLine.split(",");
-    //print(addressList[addressList.length-1]);
-    //print(' ${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
+    print(addressList[addressList.length-1]);
+    print(' ${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
     SharedPreferencesCountry prefs =  SharedPreferencesCountry();
     prefs.addCountry(addressList[addressList.length-1]);
     return Future.value("OK");
@@ -129,7 +136,7 @@ class _TrackerWidget extends State<TrackerInfo> {
   }
 
   Widget _buildBody(Map<String, double> dataMap, Map<String, String> responseMap) {
-    //print('building widget ' + dataMap.toString() + ' ' + responseMap.toString());
+    print('building widget ' + dataMap.toString() + ' ' + responseMap.toString());
     return RefreshIndicator(
       onRefresh: _handleRefresh,
       child: SingleChildScrollView(
