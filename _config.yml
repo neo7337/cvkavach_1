@@ -1,5 +1,4 @@
 theme: jekyll-theme-cayman
-page:
-  title: CVKAVACH
-  description: COVID19 Live Tracker
-  show_downloads: true
+title: CVKAVACH
+description: COVID19 Live Tracker
+show_downloads: true
