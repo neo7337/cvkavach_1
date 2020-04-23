@@ -1,5 +1,5 @@
 theme: jekyll-theme-cayman
-site:
+page:
   title: CVKAVACH
   description: COVID19 Live Tracker
   show_downloads: true
