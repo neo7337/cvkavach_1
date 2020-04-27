@@ -9,3 +9,7 @@ We use user's location to fetch the locale data as per his country location, pro
 For India, we have the district data as well provided in order to get numbers more locally.
 
 ![cvkavach Demo](demo/demoApp.gif)
+
+Thanks to the open source APIs that I used in the development:
+NovelCOVID19 API -> https://corona.lmao.ninja/docs/#/
+COVID19 INDIA -> https://www.covid19india.org/
