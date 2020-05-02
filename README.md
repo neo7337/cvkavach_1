@@ -1,5 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+![Flutter Build and Release](https://github.com/neo7337/cvkavach_1/workflows/Flutter%20Build%20and%20Release/badge.svg?branch=master)
+
 # cvkavach
 
 This project helps in tracking the COVID19 with numbers. We have used the best and trusted opensource api's to fetch the numbers and given you in the form of a simple UI.
