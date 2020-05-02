@@ -3,8 +3,14 @@ name: Flutter Build and Release
 on: [push, pull_request]
 
 jobs:
+  test-pacakge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: test packages
+        run: echo "Running tests"
   build_deploy:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     needs: [drive_android]
     name: Build apk
     steps:
