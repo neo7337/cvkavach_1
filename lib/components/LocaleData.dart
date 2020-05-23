@@ -73,12 +73,8 @@ class _LocaleDataWidget extends State<LocaleData>{
     return Future.value("OK");
   }
 
-  int _count = 0;
   Future<Null> _handleRefresh() async {
     await new Future.delayed(new Duration(seconds: 1));
-    setState(() {
-      _count += 5;
-    });
     return null;
   }
 

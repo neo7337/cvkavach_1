@@ -41,13 +41,9 @@ class _TrackerWidget extends State<TrackerInfo> {
   void initState(){
     super.initState();
   }
-
-  int _count = 0;
+  
   Future<Null> _handleRefresh() async {
     await new Future.delayed(new Duration(seconds: 1));
-    setState(() {
-      _count += 5;
-    });
     return null;
   }
 

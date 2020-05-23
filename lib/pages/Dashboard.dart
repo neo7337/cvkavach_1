@@ -12,8 +12,6 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   String display;
   int _selectedIndex = 0;
-  static TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static List<Widget> _widgetOptions = <Widget>[
     Tracker(),
     CountrySearchProvider(),
