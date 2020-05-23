@@ -12,7 +12,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="cvkavach"
-        android:icon="@mipmap/cvkavach">
+        android:icon="@mipmap/cvkavachapplogo">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

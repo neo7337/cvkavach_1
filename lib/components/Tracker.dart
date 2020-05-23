@@ -55,7 +55,7 @@ class _TrackerWidget extends State<TrackerInfo> {
     final dataRepository = Provider.of<DataRepository>(context, listen: false);
     final responseMap = await dataRepository.getEndpointData();
     print("Data fetched Successfully");
-    print(responseMap.toString());
+    //print(responseMap.toString());
     dataMap.putIfAbsent("active", () => double.parse(responseMap['Active']));
     dataMap.putIfAbsent("dead", () => double.parse(responseMap['Deaths']));
     dataMap.putIfAbsent("ok", () => double.parse(responseMap['Recovered']));
@@ -71,10 +71,13 @@ class _TrackerWidget extends State<TrackerInfo> {
     LocationData myLocation;
     String error;
     Location location = new Location();
+    bool gotLocation = false;
+    SharedPreferencesCountry prefs =  SharedPreferencesCountry();
     try {
       print("Getting Location");
       myLocation = await location.getLocation();
-      print(myLocation.toString());
+      //print(myLocation.toString());
+      gotLocation = true;
     } on PlatformException catch (e) {
       print(e.toString());
       if (e.code == 'PERMISSION_DENIED') {
@@ -88,18 +91,24 @@ class _TrackerWidget extends State<TrackerInfo> {
       myLocation = null;
     }
     //currentLocation = myLocation;
-    print("test");
-    final coordinates = new Coordinates(
+    //print("test");
+    if(gotLocation){
+      print("Location Accessed Successfully");
+      final coordinates = new Coordinates(
         myLocation.latitude, myLocation.longitude);
-    var addresses = await Geocoder.local.findAddressesFromCoordinates(
-        coordinates);
-    print("Addressed : " + addresses.toString());
-    var first = addresses.first;
-    var addressList = first.addressLine.split(",");
-    print(addressList[addressList.length-1]);
-    print(' ${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
-    SharedPreferencesCountry prefs =  SharedPreferencesCountry();
-    prefs.addCountry(addressList[addressList.length-1]);
+      var addresses = await Geocoder.local.findAddressesFromCoordinates(
+          coordinates);
+      //print("Addressed : " + addresses.toString());
+      var first = addresses.first;
+      var addressList = first.addressLine.split(",");
+      //print(addressList[addressList.length-1]);
+      //print(' ${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
+      prefs.addCountry(addressList[addressList.length-1]);
+    } else {
+      print("Location Denied");
+      prefs.addCountry('India');
+    }
+    
     return Future.value("OK");
   }
 
