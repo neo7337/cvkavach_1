@@ -10,7 +10,9 @@ For India, we have the district data as well provided in order to get numbers mo
 
 ![cvkavach Demo](demo/demoApp.gif)
 
-Thanks to the open source APIs that I used in the development:
+<img src="demo/demoApp.gif" height="100" width="48">
+
+<b>Thanks to the open source APIs that I used in the development:</b>
 
 NovelCOVID19 API -> https://corona.lmao.ninja/docs/#/
 
