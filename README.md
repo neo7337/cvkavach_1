@@ -8,9 +8,7 @@ We use user's location to fetch the locale data as per his country location, pro
 
 For India, we have the district data as well provided in order to get numbers more locally.
 
-![cvkavach Demo](demo/demoApp.gif)
-
-<img src="demo/demoApp.gif" height="200" width="100">
+<img src="demo/demoApp.gif" height="350" width="200">
 
 <b>Thanks to the open source APIs that I used in the development:</b>
 
