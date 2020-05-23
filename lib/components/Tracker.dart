@@ -145,7 +145,7 @@ class _TrackerWidget extends State<TrackerInfo> {
   }
 
   Widget _buildBody(Map<String, double> dataMap, Map<String, String> responseMap) {
-    print('building widget ' + dataMap.toString() + ' ' + responseMap.toString());
+    print('Populating tracker data ' + dataMap.toString() + ' ' + responseMap.toString());
     return RefreshIndicator(
       onRefresh: _handleRefresh,
       child: SingleChildScrollView(
