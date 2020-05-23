@@ -1,6 +1,4 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-![Flutter Build and Release](https://github.com/neo7337/cvkavach_1/workflows/Flutter%20Build%20and%20Release/badge.svg?branch=master)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![Flutter Build and Release](https://github.com/neo7337/cvkavach_1/workflows/Flutter%20Build%20and%20Release/badge.svg?branch=master)
 
 # cvkavach
 
@@ -17,3 +15,5 @@ Thanks to the open source APIs that I used in the development:
 NovelCOVID19 API -> https://corona.lmao.ninja/docs/#/
 
 COVID19 INDIA -> https://www.covid19india.org/
+
+<div>Icons made by <a href="https://www.flaticon.com/authors/srip" title="srip">srip</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
