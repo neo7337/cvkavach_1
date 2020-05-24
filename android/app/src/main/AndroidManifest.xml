@@ -13,6 +13,9 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="cvkavach"
         android:icon="@mipmap/cvkavachapplogo">
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/cvkavachapplogo.png" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

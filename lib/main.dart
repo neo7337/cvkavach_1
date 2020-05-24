@@ -136,6 +136,7 @@ class _MyApp extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    _firebaseMessaging.subscribeToTopic("dailyUpdates");
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
