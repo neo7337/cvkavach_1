@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:cvkavach/extras/pieChart.dart';
 import 'package:cvkavach/repositories/data_repositories.dart';
 import 'package:cvkavach/services/api_service.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
@@ -90,12 +89,8 @@ class _CountrySearchWidget extends State<CountrySearch> {
     return Future.value('OK');
   }
 
-  int _count = 0;
   Future<Null> _handleRefresh() async {
     await new Future.delayed(new Duration(seconds: 1));
-    setState(() {
-      _count += 5;
-    });
     return null;
   }
 
@@ -301,51 +296,6 @@ class StackedAreaLineChart extends StatelessWidget {
       // should create the same type of [DateTime] as the data provided. If none
       // specified, the default creates local date time.
       dateTimeFactory: const charts.LocalDateTimeFactory(),
-    );
-  }
-}
-
-class _CustomGraph extends StatelessWidget {
-  final Map<String, double> dataMap;
-  final String title;
-
-  _CustomGraph(this.dataMap, this.title);
-
-  @override
-  Widget build(BuildContext context) {
-    double chartRadiusFactor =
-        MediaQuery.of(context).size.aspectRatio > 0.6 ? 0.25 : 0.25;
-    double fontSize = MediaQuery.of(context).size.aspectRatio > 0.6 ? 5 : 5;
-    TextStyle titleStyle = MediaQuery.of(context).size.aspectRatio > 0.6
-        ? TextStyle(
-            color: Colors.white.withOpacity(0.8),
-            fontWeight: FontWeight.bold,
-            fontSize: 10,
-          )
-        : TextStyle(
-            color: Colors.white.withOpacity(0.8),
-            fontWeight: FontWeight.bold,
-            fontSize: 10,
-          );
-    return PieChart(
-      dataMap: dataMap,
-      animationDuration: Duration(milliseconds: 800),
-      chartRadius: MediaQuery.of(context).size.width * chartRadiusFactor,
-      showChartValuesInPercentage: true,
-      showChartValues: false,
-      showChartValuesOutside: true,
-      colorList: [Color(0xfff5c76a), Color(0xffff653b), Color(0xff9ff794)],
-      showLegends: false,
-      decimalPlaces: 1,
-      showChartValueLabel: true,
-      initialAngle: 4.5,
-      chartType: ChartType.ring,
-      chartValueStyle: TextStyle(
-        color: Colors.white.withOpacity(0.6),
-        fontSize: fontSize,
-      ),
-      chartTitle: title,
-      chartTitleStyle: titleStyle,
     );
   }
 }
