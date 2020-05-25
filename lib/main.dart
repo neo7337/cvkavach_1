@@ -161,9 +161,9 @@ class _MyApp extends State<MyApp> {
     _firebaseMessaging.getToken().then((String token) {
       assert(token != null);
       setState(() {
-        _homeScreenText = "Push Messaging token: $token";
+        _homeScreenText = "Push Messaging token acquired";
       });
-      //print(_homeScreenText);
+      print(_homeScreenText);
     });
   }
 
