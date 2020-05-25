@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPreferencesCountry {
 
   addCountry(String country) async {
-    print('saving shared prefernece: ' + country);
+    //print('saving shared prefernece: ' + country);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('countryValue', country);
   }
