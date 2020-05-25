@@ -123,7 +123,7 @@ class APIService {
     );
     if(response.statusCode == 200){
       Map<String, dynamic> decodedMap = json.decode(response.body);
-      List<dynamic> prov = decodedMap["provinces"];
+      List<dynamic> prov = decodedMap["province"];
       List<String> provinces = new List<String>();
       prov.forEach((f) {
         provinces.add(f);
@@ -289,7 +289,7 @@ class APIService {
       List<dynamic> decodedMap = jsonDecode(response.body);
       List<PVDataStruct> pvData = new List<PVDataStruct>();
       decodedMap.forEach((v){
-        if(v['country'] == country){
+        if(v['country'].toString().toLowerCase() == country.toLowerCase()){
           PVDataStruct s = APIService.pvJsonMap(v);
           pvData.add(s);
         }        

@@ -48,7 +48,7 @@ class _LocaleDataWidget extends State<LocaleData>{
 
   Future<String> _fetchLocaleData() async {
     country = await getCurrentCountry();
-    print("Country : " + country);
+    //country = "australia";
     final dataRepository = Provider.of<DataRepository>(context, listen: false);
     if(country == 'India'){
       localList = await dataRepository.getLocaleData();
@@ -80,6 +80,7 @@ class _LocaleDataWidget extends State<LocaleData>{
 
   @override
   Widget build(BuildContext context) {
+    print("Populating Locale Data");
     return FutureBuilder<List<String>>(
       future: Future.wait([_fetchLocaleData(), _fetchDistrictData()]), // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {  // AsyncSnapshot<Your object type>

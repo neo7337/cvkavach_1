@@ -96,6 +96,7 @@ class _CountrySearchWidget extends State<CountrySearch> {
 
   @override
   Widget build(BuildContext context) {
+    print("Populating Country Data");
     return FutureBuilder<List<String>>(
       future: Future.wait([_fetchCountries(), fetchCountryData(dropdownValue), fetchHistoricalData(dropdownValue)]), // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {  // AsyncSnapshot<Your object type>

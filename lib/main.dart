@@ -163,7 +163,7 @@ class _MyApp extends State<MyApp> {
       setState(() {
         _homeScreenText = "Push Messaging token: $token";
       });
-      print(_homeScreenText);
+      //print(_homeScreenText);
     });
   }
 
