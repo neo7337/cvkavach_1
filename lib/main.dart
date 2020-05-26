@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:cvkavach/pages/Dashboard.dart';
+import 'package:numometer/pages/Dashboard.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
@@ -171,7 +171,7 @@ class _MyApp extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'CVKAVACH',
+      title: 'NUMOMETER',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Color(0xFF101010),

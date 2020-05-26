@@ -1,4 +1,4 @@
-package com.app.cvkavach
+package com.app.numometer
 
 import io.flutter.app.FlutterApplication
 import io.flutter.plugin.common.PluginRegistry

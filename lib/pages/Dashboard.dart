@@ -1,6 +1,6 @@
-import 'package:cvkavach/components/CountrySearch.dart';
-import 'package:cvkavach/components/LocaleData.dart';
-import 'package:cvkavach/components/Tracker.dart';
+import 'package:numometer/components/CountrySearch.dart';
+import 'package:numometer/components/LocaleData.dart';
+import 'package:numometer/components/Tracker.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 
@@ -45,7 +45,7 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: const Text('CVKAVACH'),
+        title: const Text('NUMOMETER'),
         centerTitle: true,
         actions: <Widget>[
           IconButton(

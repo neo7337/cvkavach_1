@@ -1,4 +1,4 @@
-import 'package:cvkavach/extras/pieChart.dart';
+import 'package:numometer/extras/pieChart.dart';
 import 'package:flutter/material.dart';
 
 class CustomGraph extends StatelessWidget {

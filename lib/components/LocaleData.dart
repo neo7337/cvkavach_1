@@ -1,10 +1,10 @@
 import 'dart:collection';
 
-import 'package:cvkavach/extras/SharedPreferencesCountry.dart';
-import 'package:cvkavach/extras/StatTileInd.dart';
-import 'package:cvkavach/extras/StatsTile.dart';
-import 'package:cvkavach/repositories/data_repositories.dart';
-import 'package:cvkavach/services/api_service.dart';
+import 'package:numometer/extras/SharedPreferencesCountry.dart';
+import 'package:numometer/extras/StatTileInd.dart';
+import 'package:numometer/extras/StatsTile.dart';
+import 'package:numometer/repositories/data_repositories.dart';
+import 'package:numometer/services/api_service.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

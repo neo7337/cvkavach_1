@@ -1,4 +1,4 @@
-package com.app.cvkavach
+package com.app.numometer
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
