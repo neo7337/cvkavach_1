@@ -1,17 +1,14 @@
 class API {
-  static final String host = 'covid19.mathdro.id';
+  static final String host = 'us-central1-numometer.cloudfunctions.net';
   static final String basePath = 'api/';
-  static final String countriesPath = 'api/countries';
+  static final String countriesPath = 'app/listCountries';
   static final String jhuAllPath = 'v2/all';
   static final String jhucountriesPath = 'v2/countries';
-  static final String jhuHost = 'corona.lmao.ninja';
+  static final String jhuHost = 'disease.sh';
   static final String jhuBasePath = 'v2/historical';
-  static final String localeHost = 'api.rootnet.in';
-  static final String localePath = 'covid19-in/stats/latest';
-  static final String districtIndHost = 'api.covid19india.org';
-  static final String districtIndPath = 'v2/state_district_wise.json';
-  static final String historicalINDHost = 'api.covid19india.org';
-  static final String historicalINDPath = 'data.json';
+  static final String localePath = 'app/indStats';
+  static final String districtIndPath = 'app/indDistrict';
+  static final String historicalINDPath = 'app/dataJson';
   static final String jhuAllBase = 'v2/jhucsse';
 
   Uri endpointUri() => Uri(
@@ -40,19 +37,19 @@ class API {
 
   Uri localeData() => Uri(
     scheme:'https',
-    host: historicalINDHost,
+    host: host,
     path: '$historicalINDPath'
   );
 
   Uri districtData() => Uri(
     scheme: 'https',
-    host: districtIndHost,
+    host: host,
     path: '$districtIndPath'
   );
 
   Uri getHistoricalIndia() => Uri(
     scheme: 'https',
-    host: historicalINDHost,
+    host: host,
     path: '$historicalINDPath'
   );
 
