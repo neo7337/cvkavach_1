@@ -17,3 +17,5 @@ NovelCOVID19 API -> https://corona.lmao.ninja/docs/#/
 COVID19 INDIA -> https://www.covid19india.org/
 
 <div>Icons made by <a href="https://www.flaticon.com/authors/srip" title="srip">srip</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+
+Privacy Policy : https://www.privacypolicygenerator.info/live.php?token=T3e5xAHI0H18RM9Rdut4PuSVzL9QzKQO
