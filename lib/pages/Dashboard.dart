@@ -13,7 +13,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   String display;
   int _selectedIndex = 0;
-  var shareURL = "https://play.google.com/store/apps/details?id=com.app.cvkavach";
+  var shareURL = "https://play.google.com/store/apps/details?id=com.app.numometer";
   //var shareURL = loadYaml("/configs.yaml");
   static List<Widget> _widgetOptions = <Widget>[
     Tracker(),

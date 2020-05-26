@@ -70,7 +70,7 @@ class APIService {
 
   Future<HashMap<String, String>> getCountryInfo(String country) async {
     final uri = api.countryInfoUri(country);
-    print(uri);
+    //print(uri);
     final response = await http.get(
       uri.toString(),
       headers: {'Accept': 'application/json'}
