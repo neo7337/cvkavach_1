@@ -26,6 +26,7 @@ dependencies:
   shared_preferences: ^0.5.6+3
   share: ^0.6.4+3
   yaml: ^2.2.1
+  beacon_broadcast: ^0.2.1
   flutter:
     sdk: flutter
 
