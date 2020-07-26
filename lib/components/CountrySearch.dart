@@ -146,7 +146,6 @@ class _CountrySearchWidget extends State<CountrySearch> {
                   flex: 1,
                   child: _buildDropdown() 
                 ),
-                //_CustomGraph(dataMap, "Cases"),
                 Flexible(
                   flex: 1,
                   child: StackedAreaLineChart(
@@ -155,19 +154,6 @@ class _CountrySearchWidget extends State<CountrySearch> {
                     animate: true,
                   ) 
                 ),
-                // Flexible(
-                //   flex: 1,
-                //   child: Switch(
-                //     value: isSwitched,
-                //     onChanged: (value) {
-                //       setState(() {
-                //         isSwitched = value;
-                //       });
-                //     },
-                //     activeTrackColor: Colors.lightGreenAccent, 
-                //     activeColor: Colors.green,
-                //   ),
-                // ),
                 Flexible(
                   flex: 2,
                   child: Column(
@@ -276,7 +262,7 @@ class _CountrySearchWidget extends State<CountrySearch> {
     return [
       new charts.Series<HistoryStruct, DateTime>(
         id: 'Cases',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        colorFn: (_, __) => charts.MaterialPalette.white,
         domainFn: (HistoryStruct sales, _) => sales.date,
         measureFn: (HistoryStruct sales, _) => sales.count,
         data: c1,
