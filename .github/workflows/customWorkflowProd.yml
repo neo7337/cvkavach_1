@@ -1,0 +1,36 @@
+name: Flutter Build and Release - Prod
+
+on:
+  push:
+    branches: 
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test-pacakge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: test packages
+        run: echo "Running tests"
+  build_deploy:
+    runs-on: ubuntu-latest
+    name: Build apk
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.12.14'
+          channel: 'dev'
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - run: flutter pub get
+      - run: flutter build apk --debug --split-per-abi
+      - name: Create a Release apk
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/apk/debug/*.apk"
+          token: ${{ secrets.GITHUB_TOKEN }}

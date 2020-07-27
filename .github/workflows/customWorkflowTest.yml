@@ -1,12 +1,12 @@
-name: Flutter Build and Release
+name: Flutter Build - Test
 
 on:
   push:
     branches: 
-      - master
+      - test
   pull_request:
     branches:
-      - master
+      - test
 
 jobs:
   test-pacakge:
