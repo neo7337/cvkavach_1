@@ -29,4 +29,4 @@ TAG_NAME="$1-$3"
 echo "TAG NAME->> $TAG_NAME"
 git tag -f $TAG_NAME -m $2
 
-git push -—tags -f
+git push --tags -f
