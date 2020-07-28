@@ -1,8 +1,23 @@
+import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:numometer/repositories/data_repositories.dart';
+import 'package:numometer/services/api_service.dart';
+import 'package:provider/provider.dart';
+
+class VaccineDataProvider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Provider<DataRepository>(
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: VaccineStatus(),
+        ),
+        create: (_) => DataRepository(apiService: APIService()));
+  }
+}
 
 class VaccineStatus extends StatefulWidget {
   VaccineStatus({Key key}) : super(key: key);
-
   @override
   _VaccineStatusWidget createState() => _VaccineStatusWidget();
 }
@@ -12,8 +27,75 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
     super.initState();
   }
 
+  List<VDataStruct> vaccineData = new List<VDataStruct>();
+
+  Future<String> _fetchVaccineData() async {
+    final dataRepository = Provider.of<DataRepository>(context, listen: false);
+    vaccineData = await dataRepository.getVaccineData();
+    print("print:: " + vaccineData.toString());
+    return Future.value("OK");
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("Fetching Vaccine Data");
+    return FutureBuilder<String>(
+        future: _fetchVaccineData(),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return _buildLoading();
+          } else {
+            if (snapshot.hasError)
+              return _buildError();
+            else
+              return _buildBody(context); // snapshot.data  :- get your object which is pass from your downloadData() function
+          }
+        }
+    );
+  }
+
+  Widget _buildError() {
+    print("build error");
+    return Center(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(FeatherIcons.alertCircle, size: 48, color: Color(0xffff653b)),
+        SizedBox(height: 14),
+        Text('Server Error, Please contact Administrator',
+            style: TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                decoration: TextDecoration.none))
+      ],
+    ));
+  }
+
+  Widget _buildLoading() {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            ),
+            SizedBox(height: 24),
+            Text(
+              'Fetching latest updates',
+              style: TextStyle(fontSize: 14, color: Colors.white),
+            ),
+            SizedBox(height: 2),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
     return new Scaffold(
       body: new Container(
         child: new Center(
@@ -49,7 +131,7 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
               children: <Widget>[
                 Expanded(
                   child: new Card(
-					  color: Colors.blueGrey,
+                    color: Colors.blueGrey,
                     child: new Container(
                       padding: new EdgeInsets.all(32.0),
                       child: new Column(
@@ -71,7 +153,7 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
                 ),
                 Expanded(
                   child: new Card(
-					  color: Colors.blue[300],
+                    color: Colors.blue[300],
                     child: new Container(
                       padding: new EdgeInsets.all(32.0),
                       child: new Column(
@@ -98,7 +180,7 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
               children: <Widget>[
                 Expanded(
                   child: new Card(
-					  color: Colors.blueGrey[900],
+                    color: Colors.blueGrey[900],
                     child: new Container(
                       padding: new EdgeInsets.all(32.0),
                       child: new Column(
@@ -120,7 +202,7 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
                 ),
                 Expanded(
                   child: new Card(
-					  color: Colors.teal,
+                    color: Colors.teal,
                     child: new Container(
                       padding: new EdgeInsets.all(32.0),
                       child: new Column(
@@ -140,6 +222,12 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
                     ),
                   ),
                 ),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.all(20.0),
+                    children: _getListings(),
+                  ),
+                )
               ],
             ),
           ]),
@@ -148,3 +236,5 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
     );
   }
 }
+
+List<Widget> _getListings() {}

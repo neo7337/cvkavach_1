@@ -30,20 +30,46 @@ class DistrictData {
   DistrictData(this.district, this.confirmed);
 }
 
+class VDataStruct {
+  final String candidate;
+  final String sponsors;
+  final String trialPhase;
+  final String institutions;
+  VDataStruct(
+      this.candidate, this.sponsors, this.trialPhase, this.institutions);
+}
+
 var year = 2020;
-var months = {'January':'1','February':'2','March':'3','April':'4','May':'5','June':'6',
-'July':'7','August':'8','September':'9','October':'10','November':'11','Decemeber':'12'};
+var months = {
+  'January': '1',
+  'February': '2',
+  'March': '3',
+  'April': '4',
+  'May': '5',
+  'June': '6',
+  'July': '7',
+  'August': '8',
+  'September': '9',
+  'October': '10',
+  'November': '11',
+  'Decemeber': '12'
+};
 
 class APIService {
   final API api = new API();
 
   HashMap<String, String> responseMap = new HashMap<String, String>();
   List<String> countriesMap = new List<String>();
-  SplayTreeMap<String, String> countriesList = new SplayTreeMap<String, String>();
-  SplayTreeMap<int, List<String>> regionalDataList = new SplayTreeMap<int, List<String>>();
-  SplayTreeMap<int, List<String>> provincesData = new SplayTreeMap<int, List<String>>();
-  SplayTreeMap<int, HashMap<String, List<int>>> finalRegionalList = new SplayTreeMap<int, HashMap<String, List<int>>>();
-  HashMap<String, List<DistrictData>> districtResponse = new HashMap<String, List<DistrictData>>();
+  SplayTreeMap<String, String> countriesList =
+      new SplayTreeMap<String, String>();
+  SplayTreeMap<int, List<String>> regionalDataList =
+      new SplayTreeMap<int, List<String>>();
+  SplayTreeMap<int, List<String>> provincesData =
+      new SplayTreeMap<int, List<String>>();
+  SplayTreeMap<int, HashMap<String, List<int>>> finalRegionalList =
+      new SplayTreeMap<int, HashMap<String, List<int>>>();
+  HashMap<String, List<DistrictData>> districtResponse =
+      new HashMap<String, List<DistrictData>>();
 
   Future<HashMap<String, String>> getEndpointData() async {
     final uri = api.endpointUri();
@@ -54,13 +80,14 @@ class APIService {
     );
     if (response.statusCode == 200) {
       //print(json.decode(response.body));
-      responseMap['Confirmed']=json.decode(response.body)["cases"].toString();
-      responseMap['Recovered']=json.decode(response.body)["recovered"].toString();
-      responseMap['Deaths']=json.decode(response.body)["deaths"].toString();
-      responseMap['Active']=json.decode(response.body)["active"].toString();
+      responseMap['Confirmed'] = json.decode(response.body)["cases"].toString();
+      responseMap['Recovered'] =
+          json.decode(response.body)["recovered"].toString();
+      responseMap['Deaths'] = json.decode(response.body)["deaths"].toString();
+      responseMap['Active'] = json.decode(response.body)["active"].toString();
       int timestamp = json.decode(response.body)["updated"];
       var date = new DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
-      responseMap['LastUpdated']=date.toString();
+      responseMap['LastUpdated'] = date.toString();
       return responseMap;
     }
     print(
@@ -71,19 +98,19 @@ class APIService {
   Future<HashMap<String, String>> getCountryInfo(String country) async {
     final uri = api.countryInfoUri(country);
     //print(uri);
-    final response = await http.get(
-      uri.toString(),
-      headers: {'Accept': 'application/json'}
-    );
-    if(response.statusCode == 200){
-      responseMap['Confirmed']=json.decode(response.body)["cases"].toString();
-      responseMap['Recovered']=json.decode(response.body)["recovered"].toString();
-      responseMap['Deaths']=json.decode(response.body)["deaths"].toString();
-      responseMap['Active']=json.decode(response.body)["active"].toString();
-      responseMap['TestsTaken']=json.decode(response.body)["tests"].toString();
+    final response =
+        await http.get(uri.toString(), headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
+      responseMap['Confirmed'] = json.decode(response.body)["cases"].toString();
+      responseMap['Recovered'] =
+          json.decode(response.body)["recovered"].toString();
+      responseMap['Deaths'] = json.decode(response.body)["deaths"].toString();
+      responseMap['Active'] = json.decode(response.body)["active"].toString();
+      responseMap['TestsTaken'] =
+          json.decode(response.body)["tests"].toString();
       int timestamp = json.decode(response.body)["updated"];
       var date = new DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
-      responseMap['LastUpdated']=date.toString();
+      responseMap['LastUpdated'] = date.toString();
       return responseMap;
     }
     print(
@@ -94,20 +121,23 @@ class APIService {
   Future<SplayTreeMap<int, List<String>>> getLocaleData() async {
     final uri = api.localeData();
     //print(uri);
-    final response = await http.get(
-      uri.toString(),
-      headers: {'Accept': 'application/json'}
-    );
-    if(response.statusCode == 200){
+    final response =
+        await http.get(uri.toString(), headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
       List<dynamic> regionalList = json.decode(response.body)["statewise"];
       List<RegionalData> regional = new List<RegionalData>();
       regionalList.forEach((f) {
         RegionalData s = APIService.newJsonMap(f);
         regional.add(s);
       });
-      regional.forEach( (val) => {
-        regionalDataList[val.total]=[val.state, val.total.toString(), val.deaths.toString(), val.recovered.toString()]
-      });
+      regional.forEach((val) => {
+            regionalDataList[val.total] = [
+              val.state,
+              val.total.toString(),
+              val.deaths.toString(),
+              val.recovered.toString()
+            ]
+          });
       return regionalDataList;
     }
     print(
@@ -117,11 +147,9 @@ class APIService {
 
   Future<List<String>> getProvinces(String country) async {
     final uri = api.historicalData(country);
-    final response = await http.get(
-      uri.toString(),
-      headers: {'Accept': 'application/json'}
-    );
-    if(response.statusCode == 200){
+    final response =
+        await http.get(uri.toString(), headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
       Map<String, dynamic> decodedMap = json.decode(response.body);
       List<dynamic> prov = decodedMap["province"];
       List<String> provinces = new List<String>();
@@ -138,8 +166,9 @@ class APIService {
   Future<SplayTreeMap<String, String>> getCountries() async {
     final uri = api.countriesUri();
     //print(uri);
-    final response = await http.get(uri.toString(), headers: {'Accept': 'application/json'});
-    if(response.statusCode == 200 ){
+    final response =
+        await http.get(uri.toString(), headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
       print('Countries List fetched');
       Map<String, dynamic> decodedMap = jsonDecode(response.body);
       List<dynamic> dynamicList = decodedMap['countries'];
@@ -148,10 +177,10 @@ class APIService {
         Countries s = APIService.fromJsonMap(f);
         countries.add(s);
       });
-      countries.forEach( (val) => {
-        if(val.iso3 != null)
-          countriesList[val.name.toString()]=val.iso3.toString()
-      });
+      countries.forEach((val) => {
+            if (val.iso3 != null)
+              countriesList[val.name.toString()] = val.iso3.toString()
+          });
       return countriesList;
     }
     print(
@@ -162,11 +191,9 @@ class APIService {
   Future<List<List<HistoryStruct>>> getHistoricalDataInd() async {
     final uri = api.getHistoricalIndia();
     //print(uri);
-    final response = await http.get(
-      uri.toString(),
-      headers: {'Accept': 'application/json'}
-    );
-    if(response.statusCode == 200 ){
+    final response =
+        await http.get(uri.toString(), headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
       Map<String, dynamic> decodedMap = jsonDecode(response.body);
       List<HistoryStruct> casesList = new List<HistoryStruct>();
       List<HistoryStruct> deathsList = new List<HistoryStruct>();
@@ -174,15 +201,24 @@ class APIService {
       List<List<HistoryStruct>> historyData = new List<List<HistoryStruct>>();
       List<dynamic> indHist = decodedMap['cases_time_series'];
       List<IndHistoricData> indList = new List<IndHistoricData>();
-      indHist.forEach((f){
+      indHist.forEach((f) {
         IndHistoricData i = APIService.indJsonMap(f);
         indList.add(i);
       });
       //print('ndsds sieze'+indList.length.toString());
-      indList.forEach((val){
-        casesList.add(new HistoryStruct(new DateTime(year, int.parse(months[val.date.split(" ")[1]]), int.parse(val.date.split(" ")[0])), int.parse(val.cases)));
-        deathsList.add(new HistoryStruct(new DateTime(year, int.parse(months[val.date.split(" ")[1]]), int.parse(val.date.split(" ")[0])), int.parse(val.deaths)));
-        recoveredList.add(new HistoryStruct(new DateTime(year, int.parse(months[val.date.split(" ")[1]]), int.parse(val.date.split(" ")[0])), int.parse(val.recovered)));
+      indList.forEach((val) {
+        casesList.add(new HistoryStruct(
+            new DateTime(year, int.parse(months[val.date.split(" ")[1]]),
+                int.parse(val.date.split(" ")[0])),
+            int.parse(val.cases)));
+        deathsList.add(new HistoryStruct(
+            new DateTime(year, int.parse(months[val.date.split(" ")[1]]),
+                int.parse(val.date.split(" ")[0])),
+            int.parse(val.deaths)));
+        recoveredList.add(new HistoryStruct(
+            new DateTime(year, int.parse(months[val.date.split(" ")[1]]),
+                int.parse(val.date.split(" ")[0])),
+            int.parse(val.recovered)));
       });
       historyData.add(casesList);
       historyData.add(deathsList);
@@ -197,20 +233,18 @@ class APIService {
   Future<HashMap<String, List<DistrictData>>> getDistrictData() async {
     final uri = api.districtData();
     //print(uri);
-    final response = await http.get(
-      uri.toString(),
-      headers: {'Accept': 'application/json'}
-    );
-    if(response.statusCode == 200 ){
-      List<dynamic> indDist = jsonDecode(response.body);      
-      indDist.forEach((f){
+    final response =
+        await http.get(uri.toString(), headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
+      List<dynamic> indDist = jsonDecode(response.body);
+      indDist.forEach((f) {
         List<dynamic> ls = f["districtData"];
         List<DistrictData> distList = new List<DistrictData>();
-        ls.forEach((val){
+        ls.forEach((val) {
           DistrictData d = APIService.disJson(val);
           distList.add(d);
         });
-        districtResponse[f["state"]]=distList;
+        districtResponse[f["state"]] = distList;
       });
       return districtResponse;
     }
@@ -222,18 +256,22 @@ class APIService {
   Future<HashMap<String, String>> getCountryInfoInd() async {
     final uri = api.getHistoricalIndia();
     //print(uri);
-    final response = await http.get(
-      uri.toString(),
-      headers: {'Accept': 'application/json'}
-    );
-    if(response.statusCode == 200 ){
+    final response =
+        await http.get(uri.toString(), headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
       //print('hello ' + json.decode(response.body)["statewise"][0]['confirmed'].toString());
-      responseMap['Confirmed']=json.decode(response.body)["statewise"][0]['confirmed'].toString();
-      responseMap['Recovered']=json.decode(response.body)["statewise"][0]['recovered'].toString();
-      responseMap['Deaths']=json.decode(response.body)["statewise"][0]['deaths'].toString();
-      responseMap['Active']=json.decode(response.body)["statewise"][0]['active'].toString();
-      responseMap['TestsTaken']='0';
-      responseMap['LastUpdated']=json.decode(response.body)["statewise"][0]['lastupdatedtime'].toString();
+      responseMap['Confirmed'] =
+          json.decode(response.body)["statewise"][0]['confirmed'].toString();
+      responseMap['Recovered'] =
+          json.decode(response.body)["statewise"][0]['recovered'].toString();
+      responseMap['Deaths'] =
+          json.decode(response.body)["statewise"][0]['deaths'].toString();
+      responseMap['Active'] =
+          json.decode(response.body)["statewise"][0]['active'].toString();
+      responseMap['TestsTaken'] = '0';
+      responseMap['LastUpdated'] = json
+          .decode(response.body)["statewise"][0]['lastupdatedtime']
+          .toString();
       return responseMap;
     }
     print(
@@ -244,32 +282,39 @@ class APIService {
   Future<List<List<HistoryStruct>>> getHistoricalData(String country) async {
     final uri = api.historicalData(country);
     //print(uri);
-    final response = await http.get(
-      uri.toString(),
-      headers: {'Accept': 'application/json'}
-    );
-    if(response.statusCode == 200 ){
+    final response =
+        await http.get(uri.toString(), headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
       Map<String, dynamic> decodedMap = jsonDecode(response.body);
       List<HistoryStruct> casesList = new List<HistoryStruct>();
       List<HistoryStruct> deathsList = new List<HistoryStruct>();
       List<HistoryStruct> recoveredList = new List<HistoryStruct>();
       List<List<HistoryStruct>> historyData = new List<List<HistoryStruct>>();
-      for(var key in decodedMap['timeline']['cases'].keys) {
-        casesList.add(new HistoryStruct(new DateTime(int.parse("20"+key.toString().split("/")[2]), 
-        int.parse(key.toString().split("/")[0]), 
-          int.parse(key.toString().split("/")[1])), decodedMap['timeline']['cases'][key]));
+      for (var key in decodedMap['timeline']['cases'].keys) {
+        casesList.add(new HistoryStruct(
+            new DateTime(
+                int.parse("20" + key.toString().split("/")[2]),
+                int.parse(key.toString().split("/")[0]),
+                int.parse(key.toString().split("/")[1])),
+            decodedMap['timeline']['cases'][key]));
       }
       historyData.add(casesList);
-      for(var key in decodedMap['timeline']['deaths'].keys) {
-        deathsList.add(new HistoryStruct(new DateTime(int.parse("20"+key.toString().split("/")[2]), 
-        int.parse(key.toString().split("/")[0]), 
-          int.parse(key.toString().split("/")[1])), decodedMap['timeline']['deaths'][key]));
+      for (var key in decodedMap['timeline']['deaths'].keys) {
+        deathsList.add(new HistoryStruct(
+            new DateTime(
+                int.parse("20" + key.toString().split("/")[2]),
+                int.parse(key.toString().split("/")[0]),
+                int.parse(key.toString().split("/")[1])),
+            decodedMap['timeline']['deaths'][key]));
       }
       historyData.add(deathsList);
-      for(var key in decodedMap['timeline']['recovered'].keys) {
-        recoveredList.add(new HistoryStruct(new DateTime(int.parse("20"+key.toString().split("/")[2]), 
-        int.parse(key.toString().split("/")[0]), 
-          int.parse(key.toString().split("/")[1])), decodedMap['timeline']['recovered'][key]));
+      for (var key in decodedMap['timeline']['recovered'].keys) {
+        recoveredList.add(new HistoryStruct(
+            new DateTime(
+                int.parse("20" + key.toString().split("/")[2]),
+                int.parse(key.toString().split("/")[0]),
+                int.parse(key.toString().split("/")[1])),
+            decodedMap['timeline']['recovered'][key]));
       }
       historyData.add(recoveredList);
       return historyData;
@@ -279,29 +324,63 @@ class APIService {
     throw response;
   }
 
-  Future<SplayTreeMap<int, List<String>>> getProvinceData(String country) async {
+  Future<SplayTreeMap<int, List<String>>> getProvinceData(
+      String country) async {
     final uri = api.getProvinceData();
-    final response = await http.get(
-      uri.toString(),
-      headers: {'Accept': 'application/json'}
-    );
-    if(response.statusCode == 200 ){
+    final response =
+        await http.get(uri.toString(), headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
       List<dynamic> decodedMap = jsonDecode(response.body);
       List<PVDataStruct> pvData = new List<PVDataStruct>();
-      decodedMap.forEach((v){
-        if(v['country'].toString().toLowerCase() == country.toLowerCase()){
+      decodedMap.forEach((v) {
+        if (v['country'].toString().toLowerCase() == country.toLowerCase()) {
           PVDataStruct s = APIService.pvJsonMap(v);
           pvData.add(s);
-        }        
+        }
       });
       pvData.forEach((v) => {
-        provincesData[int.parse(v.total)]=[v.province, v.total, v.deaths, v.recovered]
-      });
+            provincesData[int.parse(v.total)] = [
+              v.province,
+              v.total,
+              v.deaths,
+              v.recovered
+            ]
+          });
       return provincesData;
     }
     print(
         'Countries Request $uri failed\nResponse: ${response.statusCode} ${response.reasonPhrase}');
     throw response;
+  }
+
+  Future<List<VDataStruct>> getVaccineData() async {
+    //print("calling vaccine data");
+    final uri = api.getVaccineData();
+    final response =
+        await http.get(uri.toString(), headers: {'Accept': 'application/json'});
+    if (response.statusCode == 200) {
+      Map<String, dynamic> decodedMap = jsonDecode(response.body);
+      List<dynamic> decodedList = decodedMap["data"];
+      List<VDataStruct> vData = new List<VDataStruct>();
+      decodedList.forEach((v) {
+        //print("vdata: " + v.toString());
+        VDataStruct vs = APIService.vJsonMap(v);
+        print(vs.sponsors.toString());
+        vData.add(vs);
+      });
+      return vData;
+    }
+    print(
+        'Countries Request $uri failed\nResponse: ${response.statusCode} ${response.reasonPhrase}');
+    throw response;
+  }
+
+  static VDataStruct vJsonMap(Map<String, dynamic> json) {
+    String candidate = json['candidate'].toString();
+    String sponsors = json['sponsors'].toString();
+    String trialPhase = json['trialPhase'].toString();
+    String institutions = json['institutions'].toString();
+    return new VDataStruct(candidate, sponsors, trialPhase, institutions);
   }
 
   static PVDataStruct pvJsonMap(Map<String, dynamic> json) {
@@ -327,7 +406,7 @@ class APIService {
     return new RegionalData(state, total, deaths, recovered);
   }
 
-  static IndHistoricData indJsonMap(Map<String, dynamic> json){
+  static IndHistoricData indJsonMap(Map<String, dynamic> json) {
     //print('intjson: '+json['date'].toString());
     String date = json['date'].toString();
     String cases = json['totalconfirmed'].toString();
@@ -335,13 +414,12 @@ class APIService {
     String recovered = json['totalrecovered'].toString();
     return new IndHistoricData(date, cases, deaths, recovered);
   }
-  
+
   static DistrictData disJson(Map<String, dynamic> json) {
     String district = json["district"];
     int confirmed = json["confirmed"];
     return new DistrictData(district, confirmed);
   }
-
 }
 
 class PVDataStruct {

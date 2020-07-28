@@ -20,7 +20,7 @@ class _DashboardState extends State<Dashboard> {
       "https://play.google.com/store/apps/details?id=com.app.numometer";
   static List<Widget> _widgetOptions = <Widget>[
     Tracker(),
-    VaccineStatus(),
+    VaccineDataProvider(),
     CountrySearchProvider(),
     LocaleDataProvider()
   ];
