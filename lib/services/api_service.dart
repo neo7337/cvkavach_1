@@ -362,10 +362,9 @@ class APIService {
       Map<String, dynamic> decodedMap = jsonDecode(response.body);
       List<dynamic> decodedList = decodedMap["data"];
       List<VDataStruct> vData = new List<VDataStruct>();
+      print("Decoded List: " + decodedList.length.toString());
       decodedList.forEach((v) {
-        //print("vdata: " + v.toString());
         VDataStruct vs = APIService.vJsonMap(v);
-        print(vs.sponsors.toString());
         vData.add(vs);
       });
       return vData;
