@@ -50,7 +50,7 @@ class _TrackerWidget extends State<TrackerInfo> {
   Future<String> _updateData() async {
     final dataRepository = Provider.of<DataRepository>(context, listen: false);
     final responseMap = await dataRepository.getEndpointData();
-    print("Data fetched Successfully");
+    //print("Data fetched Successfully");
     //print(responseMap.toString());
     dataMap.putIfAbsent("active", () => double.parse(responseMap['Active']));
     dataMap.putIfAbsent("dead", () => double.parse(responseMap['Deaths']));
@@ -70,12 +70,12 @@ class _TrackerWidget extends State<TrackerInfo> {
     bool gotLocation = false;
     SharedPreferencesCountry prefs =  SharedPreferencesCountry();
     try {
-      print("Getting Location");
+      //print("Getting Location");
       myLocation = await location.getLocation();
       //print(myLocation.toString());
       gotLocation = true;
     } on PlatformException catch (e) {
-      print(e.toString());
+      //print(e.toString());
       if (e.code == 'PERMISSION_DENIED') {
         error = 'please grant permission';
         print(error);
@@ -89,7 +89,7 @@ class _TrackerWidget extends State<TrackerInfo> {
     //currentLocation = myLocation;
     //print("test");
     if(gotLocation){
-      print("Location Accessed Successfully");
+      //print("Location Accessed Successfully");
       final coordinates = new Coordinates(
         myLocation.latitude, myLocation.longitude);
       var addresses = await Geocoder.local.findAddressesFromCoordinates(
@@ -101,7 +101,7 @@ class _TrackerWidget extends State<TrackerInfo> {
       //print(' ${first.locality}, ${first.adminArea},${first.subLocality}, ${first.subAdminArea},${first.addressLine}, ${first.featureName},${first.thoroughfare}, ${first.subThoroughfare}');
       prefs.addCountry(addressList[addressList.length-1]);
     } else {
-      print("Location Denied");
+      //print("Location Denied");
       prefs.addCountry('India');
     }
     
@@ -141,7 +141,7 @@ class _TrackerWidget extends State<TrackerInfo> {
   }
 
   Widget _buildBody(Map<String, double> dataMap, Map<String, String> responseMap) {
-    print('Populating tracker data ' + dataMap.toString() + ' ' + responseMap.toString());
+    //print('Populating tracker data ' + dataMap.toString() + ' ' + responseMap.toString());
     return RefreshIndicator(
       onRefresh: _handleRefresh,
       child: SingleChildScrollView(

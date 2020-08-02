@@ -133,7 +133,7 @@ class PageItem extends StatelessWidget {
                               title: Text("Details",
                                   style:
                                       TextStyle(fontWeight: FontWeight.w500)),
-                              subtitle: Text(vData.details),
+                              subtitle: Text(vData.details.replaceAll("&nbsp;", '').replaceAll("&rsquo;", "'")),
                             ),
                           ],
                         ))
@@ -154,11 +154,11 @@ MaterialColor _fetchTheme(String phase) {
   if (phase.indexOf("3") > 0) {
     return Colors.teal;
   } else if (phase.indexOf("2") > 0) {
-    return Colors.blueAccent[500];
+    return Colors.blueGrey;
   } else if (phase.indexOf("1") > 0) {
-    return Colors.blueAccent[300];
-  } else if (phase.indexOf("pre") >= 0) {
-    return Colors.blueAccent[100];
+    return Colors.cyan;
+  } else if (phase.indexOf("Pre") >= 0) {
+    return Colors.grey;
   } else {
     return Colors.amber;
   }

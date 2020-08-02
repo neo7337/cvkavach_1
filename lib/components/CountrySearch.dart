@@ -283,18 +283,6 @@ class _CountrySearchWidget extends State<CountrySearch> {
       ),
     ];
   }
-
-  // static List<charts.Series<HistoryStruct, DateTime>> _createSampleDataBar(c1) {
-  //   return [
-  //     new charts.Series<HistoryStruct, DateTime>(
-  //       id: 'Cases',
-  //       colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-  //       domainFn: (HistoryStruct sales, _) => sales.date,
-  //       measureFn: (HistoryStruct sales, _) => sales.count,
-  //       data: c1,
-  //     )
-  //   ];
-  // }
 }
 
 class StackedAreaLineChart extends StatelessWidget {
@@ -315,32 +303,6 @@ class StackedAreaLineChart extends StatelessWidget {
     );
   }
 }
-
-// class TimeSeriesBar extends StatelessWidget {
-
-//   final List<charts.Series> seriesList;
-//   final bool animate;
-
-//   TimeSeriesBar(this.seriesList, {this.animate});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return new charts.TimeSeriesChart(
-//       seriesList,
-//       animate: animate,
-//       // Set the default renderer to a bar renderer.
-//       // This can also be one of the custom renderers of the time series chart.
-//       defaultRenderer: new charts.BarRendererConfig<DateTime>(),
-//       // It is recommended that default interactions be turned off if using bar
-//       // renderer, because the line point highlighter is the default for time
-//       // series chart.
-//       defaultInteractions: false,
-//       // If default interactions were removed, optionally add select nearest
-//       // and the domain highlighter that are typical for bar charts.
-//       behaviors: [new charts.SelectNearest(), new charts.DomainHighlighter()],
-//     );
-//   }
-// }
 
 class _StatTile extends StatelessWidget {
   final Color color;

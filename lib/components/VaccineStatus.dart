@@ -48,7 +48,7 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
 
   @override
   Widget build(BuildContext context) {
-    print("Fetching Vaccine Data");
+    //print("Fetching Vaccine Data");
     return FutureBuilder(
         future: _fetchVaccineData(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -107,36 +107,31 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
 
   Widget _buildBody(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Color(0xFF101010),
-      body: RefreshIndicator (
-        onRefresh: _handleRefresh,
-          child:new SafeArea (
-            child: Container(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
+        backgroundColor: Color(0xFF101010),
+        body: RefreshIndicator(
+            onRefresh: _handleRefresh,
+            child: new SafeArea(
+                child: Container(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
                   Expanded(
-                  child:  ListView(
-                    padding: const EdgeInsets.all(20.0),
-                    children: _getListings(vaccineData),
-                  ),
-                )
-              ]
-            )
-          )
-        )
-      )
-    );
+                    child: ListView(
+                      padding: const EdgeInsets.all(20.0),
+                      children: _getListings(vaccineData),
+                    ),
+                  )
+                ])))));
   }
 }
 
 List<Widget> _getListings(List<VDataStruct> list) {
-    List listings = new List<Widget>();
-    if(list.length >0) {
-        for(var i=0; i<list.length; i++) {
-            listings.add(VaccineDataTile(i, list[i]));
-        }
+  List listings = new List<Widget>();
+  if (list.length > 0) {
+    for (var i = 0; i < list.length; i++) {
+      listings.add(VaccineDataTile(i, list[i]));
     }
-    return listings;
+  }
+  return listings;
 }

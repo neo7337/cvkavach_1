@@ -80,7 +80,7 @@ class _LocaleDataWidget extends State<LocaleData>{
 
   @override
   Widget build(BuildContext context) {
-    print("Populating Locale Data");
+    //print("Populating Locale Data");
     return FutureBuilder<List<String>>(
       future: Future.wait([_fetchLocaleData(), _fetchDistrictData()]), // function where you call your api
       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {  // AsyncSnapshot<Your object type>
