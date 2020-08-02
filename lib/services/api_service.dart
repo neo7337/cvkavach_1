@@ -35,8 +35,10 @@ class VDataStruct {
   final String sponsors;
   final String trialPhase;
   final String institutions;
+  final String funding;
+  final String details;
   VDataStruct(
-      this.candidate, this.sponsors, this.trialPhase, this.institutions);
+      this.candidate, this.sponsors, this.trialPhase, this.institutions, this.details, this.funding);
 }
 
 var year = 2020;
@@ -362,7 +364,6 @@ class APIService {
       Map<String, dynamic> decodedMap = jsonDecode(response.body);
       List<dynamic> decodedList = decodedMap["data"];
       List<VDataStruct> vData = new List<VDataStruct>();
-      print("Decoded List: " + decodedList.length.toString());
       decodedList.forEach((v) {
         VDataStruct vs = APIService.vJsonMap(v);
         vData.add(vs);
@@ -379,7 +380,9 @@ class APIService {
     String sponsors = json['sponsors'].toString();
     String trialPhase = json['trialPhase'].toString();
     String institutions = json['institutions'].toString();
-    return new VDataStruct(candidate, sponsors, trialPhase, institutions);
+    String details = json['details'].toString();
+    String funding = json['funding'].toString();
+    return new VDataStruct(candidate, sponsors, trialPhase, institutions, details, funding);
   }
 
   static PVDataStruct pvJsonMap(Map<String, dynamic> json) {

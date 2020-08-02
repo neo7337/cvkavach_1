@@ -1,6 +1,7 @@
 import 'package:async/async.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:numometer/extras/VaccineDataTile.dart';
 import 'package:numometer/repositories/data_repositories.dart';
 import 'package:numometer/services/api_service.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,6 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
   }
 
   List<VDataStruct> vaccineData = new List<VDataStruct>();
-  List<Item> _data;
   final AsyncMemoizer _memoizer = AsyncMemoizer();
 
   _fetchVaccineData() {
@@ -37,9 +37,13 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
       final dataRepository =
           Provider.of<DataRepository>(context, listen: false);
       vaccineData = await dataRepository.getVaccineData();
-      _data = generateItems(vaccineData, vaccineData.length);
       return "OK";
     });
+  }
+
+  Future<Null> _handleRefresh() async {
+    await new Future.delayed(new Duration(seconds: 1));
+    return null;
   }
 
   @override
@@ -103,55 +107,36 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
 
   Widget _buildBody(BuildContext context) {
     return new Scaffold(
-        backgroundColor: Color(0xFF101010),
-        body: SingleChildScrollView(
-          child: Container(
-              child: ExpansionPanelList(
-            expansionCallback: (int index, bool isExpanded) {
-              setState(() {
-                _data[index].isExpanded = !isExpanded;
-              });
-            },
-            children: _data.map<ExpansionPanel>((Item item) {
-              return ExpansionPanel(
-                headerBuilder: (BuildContext context, bool isExpanded) {
-                  return ListTile(
-                    title: Text(item.headerValue),
-                  );
-                },
-                body: ListTile(
-                  title: Text(item.expandedValue),
-                  subtitle: Text(item.institution),
-                ),
-                isExpanded: item.isExpanded,
-              );
-            }).toList(),
-          )),
-        ));
+      backgroundColor: Color(0xFF101010),
+      body: RefreshIndicator (
+        onRefresh: _handleRefresh,
+          child:new SafeArea (
+            child: Container(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                  child:  ListView(
+                    padding: const EdgeInsets.all(20.0),
+                    children: _getListings(vaccineData),
+                  ),
+                )
+              ]
+            )
+          )
+        )
+      )
+    );
   }
 }
 
-List<Item> generateItems(List<VDataStruct> data, int numberOfItems) {
-  List<Item> itemList = new List<Item>();
-  for (var i = 0; i < data.length; i++) {
-    itemList.add(Item(
-        headerValue: data[i].candidate,
-        expandedValue: data[i].trialPhase,
-        institution: data[i].institutions));
-  }
-  return itemList;
-}
-
-class Item {
-  Item({
-    this.expandedValue,
-    this.headerValue,
-    this.institution,
-    this.isExpanded = false,
-  });
-
-  String expandedValue;
-  String headerValue;
-  String institution;
-  bool isExpanded;
+List<Widget> _getListings(List<VDataStruct> list) {
+    List listings = new List<Widget>();
+    if(list.length >0) {
+        for(var i=0; i<list.length; i++) {
+            listings.add(VaccineDataTile(i, list[i]));
+        }
+    }
+    return listings;
 }
