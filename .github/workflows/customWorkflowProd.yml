@@ -38,10 +38,12 @@ jobs:
           --output $HOME/secrets/secrets.tar secrets.tar.gpg
           tar xvf $HOME/secrets/secrets.tar
           flutter build apk --split-per-abi
+          flutter build appbundle
+          flutter build apk
         env:
           SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
-      - name: Create a Release apk
-        uses: ncipollo/release-action@v1
+      - name: Upload
+        uses: actions/upload-artifact@master
         with:
-          artifacts: "build/app/outputs/apk/debug/*.apk"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          name: apk-build
+          path: build/app/outputs/bundle/release
