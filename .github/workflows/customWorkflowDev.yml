@@ -24,7 +24,7 @@ jobs:
         with:
           flutter-version: '1.12.14'
           channel: 'dev'
-      - uses: flutter upgrade
+      - run: flutter upgrade
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'

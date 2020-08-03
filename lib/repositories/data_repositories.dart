@@ -126,4 +126,16 @@ class DataRepository {
       rethrow;
     }
   }
+
+  Future<VaccineData> getVaccineData() async {
+    try{
+      //print('calling getVaccineData datarepository ');
+      return await apiService.getVaccineData();
+    } on Response catch (response) {
+      if(response.statusCode == 401 ){
+        return await apiService.getVaccineData();
+      }
+      rethrow;
+    }
+  }
 }

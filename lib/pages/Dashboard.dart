@@ -4,7 +4,6 @@ import 'package:numometer/components/LocaleData.dart';
 import 'package:numometer/components/Tracker.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
-import 'package:numometer/extras/SDApi.dart';
 
 class Dashboard extends StatefulWidget {
   Dashboard({Key key}) : super(key: key);
@@ -15,12 +14,11 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   String display;
   int _selectedIndex = 0;
-  bool _lights = false;
   var shareURL =
       "https://play.google.com/store/apps/details?id=com.app.numometer";
   static List<Widget> _widgetOptions = <Widget>[
     Tracker(),
-    VaccineStatus(),
+    VaccineDataProvider(),
     CountrySearchProvider(),
     LocaleDataProvider()
   ];
@@ -33,16 +31,6 @@ class _DashboardState extends State<Dashboard> {
 
   void initState() {
     super.initState();
-  }
-
-  invokeSocialDistancingAPI() {
-    SDApi invoke = new SDApi();
-    if (_lights) {
-      invoke.invokeSocDistance();
-      var mon = invoke.monitorApi();
-      print(mon.toString());
-    } else
-      invoke.stopTransmission();
   }
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -93,12 +81,12 @@ class _DashboardState extends State<Dashboard> {
       drawer: Drawer(
           child: ListView(padding: EdgeInsets.zero, children: <Widget>[
         UserAccountsDrawerHeader(
-          accountName: Text("N/A"),
+          accountName: Text("Guest User"),
           accountEmail: Text("N/A"),
           currentAccountPicture: CircleAvatar(
             backgroundColor: Colors.white,
             child: Text(
-                "U",
+                "G",
                 style: TextStyle(fontSize: 40.0)
             )
           ),
@@ -112,7 +100,7 @@ class _DashboardState extends State<Dashboard> {
             // Then close the drawer
             showAboutDialog(
                 context: context,
-                applicationVersion: "2.1.1+1",
+                applicationVersion: "Version: 2.2.2",
                 applicationLegalese:
                     "This project helps in tracking the COVID19 with numbers. We have used the best and trusted opensource api's to fetch the numbers and given you in the form of a simple UI.We use user's location to fetch the locale data as per his country location, provided the country's data is available.");
           },

@@ -10,6 +10,7 @@ class API {
   static final String districtIndPath = 'app/indDistrict';
   static final String historicalINDPath = 'app/dataJson';
   static final String jhuAllBase = 'v2/jhucsse';
+  static final String jhuVaccineData = 'v3/covid-19/vaccine';
 
   Uri endpointUri() => Uri(
     scheme: 'https',
@@ -57,5 +58,11 @@ class API {
     scheme: 'https',
     host: jhuHost,
     path: '$jhuAllBase'
+  );
+
+  Uri getVaccineData() => Uri(
+    scheme: 'https',
+    host: jhuHost,
+    path: '$jhuVaccineData'
   );
 }
