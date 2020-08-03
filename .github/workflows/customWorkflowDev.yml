@@ -32,9 +32,18 @@ jobs:
       - run: flutter format --set-exit-if-changed .
       - run: flutter analyze .
       - run : flutter test
-      - run: flutter build apk --debug --split-per-abi
+      - name: Build
+        run: |
+          mkdir $HOME/secrets
+          gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" \
+          --output $HOME/secrets/secrets.tar secrets.tar.gpg
+          tar xvf $HOME/secrets/secrets.tar
+          flutter build appbundle
+          flutter build apk
+        env:
+          SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
       - name: Create a Snapshot apk
         uses: actions/upload-artifact@master
         with:
-          name: apk-release
-          path: build/app/outputs/bundle/release/app-release.apk
+          name: apk-build
+          path: build/app/outputs/bundle/release
