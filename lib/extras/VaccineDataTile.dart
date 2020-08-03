@@ -30,6 +30,7 @@ class VaccineDataTile extends StatelessWidget {
               children: <Widget>[
                 Material(
                   child: ListTile(
+                    
                     title: Text(vData.candidate.toString()),
                     subtitle: Text(vData.trialPhase.toString()),
                   ),

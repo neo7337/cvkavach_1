@@ -29,7 +29,8 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
     super.initState();
   }
 
-  List<VDataStruct> vaccineData = new List<VDataStruct>();
+  VaccineData vaccineData;
+  List<VaccinePhases> vaccinePhases = new List<VaccinePhases>();
   final AsyncMemoizer _memoizer = AsyncMemoizer();
 
   _fetchVaccineData() {
@@ -37,6 +38,7 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
       final dataRepository =
           Provider.of<DataRepository>(context, listen: false);
       vaccineData = await dataRepository.getVaccineData();
+      vaccinePhases = vaccineData.phases;
       return "OK";
     });
   }
@@ -116,10 +118,37 @@ class _VaccineStatusWidget extends State<VaccineStatus> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
+                  new Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: new Card(
+                            color: Color(0xfff5c76a),
+                          child: new Container(
+                            padding: new EdgeInsets.all(32.0),
+                            child: new Column(
+                              children: <Widget>[
+                                ListTile(
+                                    dense: true,
+                                    title: Text('Total Vaccine Contendors',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500)),
+                                    trailing: Text(
+                                      vaccineData.totalCandidates,
+                                      style:
+                                          Theme.of(context).textTheme.headline4,
+                                    )),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   Expanded(
                     child: ListView(
                       padding: const EdgeInsets.all(20.0),
-                      children: _getListings(vaccineData),
+                      children: _getListings(vaccineData.vDataStruct),
                     ),
                   )
                 ])))));

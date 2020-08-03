@@ -127,7 +127,7 @@ class DataRepository {
     }
   }
 
-  Future<List<VDataStruct>> getVaccineData() async {
+  Future<VaccineData> getVaccineData() async {
     try{
       //print('calling getVaccineData datarepository ');
       return await apiService.getVaccineData();

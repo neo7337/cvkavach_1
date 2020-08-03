@@ -30,6 +30,19 @@ class DistrictData {
   DistrictData(this.district, this.confirmed);
 }
 
+class VaccinePhases {
+  final String phase;
+  final String candidates;
+  VaccinePhases(this.phase, this.candidates);
+}
+
+class VaccineData {
+  final List<VDataStruct> vDataStruct;
+  final String totalCandidates;
+  final List<VaccinePhases> phases;
+  VaccineData(this.vDataStruct, this.totalCandidates, this.phases);
+}
+
 class VDataStruct {
   final String candidate;
   final String sponsors;
@@ -257,11 +270,10 @@ class APIService {
 
   Future<HashMap<String, String>> getCountryInfoInd() async {
     final uri = api.getHistoricalIndia();
-    //print(uri);
     final response =
         await http.get(uri.toString(), headers: {'Accept': 'application/json'});
     if (response.statusCode == 200) {
-      //print('hello ' + json.decode(response.body)["statewise"][0]['confirmed'].toString());
+      Map<String, dynamic> decodedMap = jsonDecode(response.body);
       responseMap['Confirmed'] =
           json.decode(response.body)["statewise"][0]['confirmed'].toString();
       responseMap['Recovered'] =
@@ -270,7 +282,8 @@ class APIService {
           json.decode(response.body)["statewise"][0]['deaths'].toString();
       responseMap['Active'] =
           json.decode(response.body)["statewise"][0]['active'].toString();
-      responseMap['TestsTaken'] = '0';
+      List<dynamic> tests = decodedMap['tested'];
+      responseMap['TestsTaken'] = json.decode(response.body)['tested'][tests.length-1]['totalsamplestested'].toString();
       responseMap['LastUpdated'] = json
           .decode(response.body)["statewise"][0]['lastupdatedtime']
           .toString();
@@ -355,7 +368,7 @@ class APIService {
     throw response;
   }
 
-  Future<List<VDataStruct>> getVaccineData() async {
+  Future<VaccineData> getVaccineData() async {
     //print("calling vaccine data");
     final uri = api.getVaccineData();
     final response =
@@ -363,16 +376,28 @@ class APIService {
     if (response.statusCode == 200) {
       Map<String, dynamic> decodedMap = jsonDecode(response.body);
       List<dynamic> decodedList = decodedMap["data"];
+      List<dynamic> phasesList = decodedMap["phases"];
       List<VDataStruct> vData = new List<VDataStruct>();
+      List<VaccinePhases> vpData = new List<VaccinePhases>();
       decodedList.forEach((v) {
         VDataStruct vs = APIService.vJsonMap(v);
         vData.add(vs);
       });
-      return vData;
+      phasesList.forEach((v) {
+        VaccinePhases vp = APIService.vpJsonMap(v);
+        vpData.add(vp);
+      });
+      return new VaccineData(vData, json.decode(response.body)["totalCandidates"].toString(), vpData);
     }
     print(
         'Countries Request $uri failed\nResponse: ${response.statusCode} ${response.reasonPhrase}');
     throw response;
+  }
+
+  static VaccinePhases vpJsonMap(Map<String, dynamic> json) {
+    String phase = json['phase'].toString();
+    String candidates = json['candidates'].toString();
+    return new VaccinePhases(phase, candidates);
   }
 
   static VDataStruct vJsonMap(Map<String, dynamic> json) {
