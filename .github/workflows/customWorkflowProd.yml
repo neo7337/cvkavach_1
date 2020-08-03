@@ -37,12 +37,11 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$SECRET_PASSPHRASE" \
           --output $HOME/secrets/secrets.tar secrets.tar.gpg
           tar xvf $HOME/secrets/secrets.tar
-          flutter build appbundle
-          flutter build apk
+          flutter build apk --split-per-abi
         env:
           SECRET_PASSPHRASE: ${{ secrets.SECRET_PASSPHRASE }}
-      - name: Create a Snapshot apk
-        uses: actions/upload-artifact@master
+      - name: Create a Release apk
+        uses: ncipollo/release-action@v1
         with:
-          name: apk-build
-          path: build/app/outputs/bundle/release
+          artifacts: "build/app/outputs/apk/debug/*.apk"
+          token: ${{ secrets.GITHUB_TOKEN }}
