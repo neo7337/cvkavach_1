@@ -1,4 +1,4 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![Flutter Build and Release](https://github.com/neo7337/cvkavach_1/workflows/Flutter%20Build%20and%20Release/badge.svg?branch=master)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![Flutter Build and Release - Prod](https://github.com/neo7337/cvkavach_1/workflows/Flutter%20Build%20and%20Release%20-%20Prod/badge.svg) ![Flutter Build and Publish Snapshots - Dev](https://github.com/neo7337/cvkavach_1/workflows/Flutter%20Build%20and%20Publish%20Snapshots%20-%20Dev/badge.svg)
 
 # NumOMeter
 
