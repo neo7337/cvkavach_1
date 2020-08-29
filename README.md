@@ -2,7 +2,7 @@
 
 # NumOMeter
 
-This project helps in tracking the COVID19 with numbers. We have used the best and trusted opensource api's to fetch the numbers and given you in the form of a simple UI.We provide a vaccine tracker as well.\
+This project helps in tracking the COVID19 with numbers. We have used the best and trusted opensource api's to fetch the numbers and given you in the form of a simple UI. We provide a vaccine tracker as well.\
 We use user's location to fetch the locale data as per his country location, provided the country's data is available.\
 For India, we have the district data as well provided in order to get numbers more locally.
 
