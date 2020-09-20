@@ -406,7 +406,7 @@ class APIService {
     String trialPhase = json['trialPhase'].toString();
     String institutions = json['institutions'].toString();
     String details = json['details'].toString();
-    String funding = json['funding'].toString();
+    String funding = (json['funding'].toString() == "null") ? "N/A" : json['funding'].toString();
     return new VDataStruct(candidate, sponsors, trialPhase, institutions, details, funding);
   }
 

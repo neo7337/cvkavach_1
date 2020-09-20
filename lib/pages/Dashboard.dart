@@ -14,6 +14,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   String display;
   int _selectedIndex = 0;
+  bool _lights = false;
   var shareURL =
       "https://play.google.com/store/apps/details?id=com.app.numometer";
   static List<Widget> _widgetOptions = <Widget>[
@@ -84,12 +85,19 @@ class _DashboardState extends State<Dashboard> {
           accountName: Text("Guest User"),
           accountEmail: Text("N/A"),
           currentAccountPicture: CircleAvatar(
-            backgroundColor: Colors.white,
-            child: Text(
-                "G",
-                style: TextStyle(fontSize: 40.0)
-            )
-          ),
+              backgroundColor: Colors.white,
+              child: Text("G", style: TextStyle(fontSize: 40.0))),
+        ),
+        SwitchListTile(
+          title: const Text('Switch Theme'),
+          value: _lights,
+          onChanged: (bool value) {
+            setState(() {
+              _lights = value;
+            });
+            
+          },
+          secondary: const Icon(Icons.blur_circular),
         ),
         ListTile(
           leading: Icon(Icons.info),

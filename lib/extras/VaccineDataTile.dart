@@ -118,7 +118,7 @@ class PageItem extends StatelessWidget {
                               title: Text("Funding",
                                   style:
                                       TextStyle(fontWeight: FontWeight.w500)),
-                              subtitle: Text(vData.funding.substring(
+                              subtitle: Text((vData.funding == 'N/A') ? 'N/A' : vData.funding.substring(
                                   vData.funding.indexOf('[') + 1,
                                   vData.funding.indexOf(']'))),
                             ),
